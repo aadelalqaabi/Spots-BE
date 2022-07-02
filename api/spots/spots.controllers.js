@@ -11,21 +11,24 @@ exports.getSpots = async (req, res, next) => {
   }
 };
 
-exports.spotsCreate = async (req, res, next) => { 
+exports.spotsCreate = async (req, res, next) => {
   const { categoryId } = req.params;
-//   req.body.organizer = req.organizer._id;
+  //   req.body.organizer = req.organizer._id;
   req.body.category = categoryId;
   if (req.file) {
     req.body.image = `/uploads/${req.file.filename}`;
   }
+
   try {
-    const newSpot = await Spot.create(req.body);
+    const completeSpot = await days(req.body);
+    const newSpot = await Spot.create(completeSpot);
+    console.log(completeSpot);
     // await Organizer.findByIdAndUpdate(req.organizer._id, {
     //   $push: { spots: newSpot._id },
     // });
     await Category.findByIdAndUpdate(categoryId, {
-        $push: { spots: newSpot._id },
-      });
+      $push: { spots: newSpot._id },
+    });
     res.status(201).json(newSpot);
   } catch (error) {
     next(error);
@@ -62,4 +65,15 @@ exports.fetchSpot = async (spotId, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+days = (newSpot) => {
+  // console.log(newSpot);
+  for (let i = 0; i < newSpot.numOfDays; i++) {
+    newSpot.days.push({
+      day: newSpot.startDate + i,
+      seats: newSpot.seats,
+    });
+  }
+  return newSpot;
 };

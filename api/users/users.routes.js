@@ -9,6 +9,8 @@ const {
   getUsers,
   fetchUser,
   updateUser,
+  spotAdd,
+  removeSpot,
 } = require("./users.controllers");
 
 router.param("userId", async (req, res, next, userId) => {
@@ -24,11 +26,20 @@ router.param("userId", async (req, res, next, userId) => {
 });
 
 router.post("/register", upload.single("image"), register);
-router.post(
-  "/login",
-  passport.authenticate("user", { session: false }),
-  login
+router.post("/login", passport.authenticate("user", { session: false }), login);
+router.put("/", upload.single("image"), updateUser);
+
+router.put(
+  "/spots/:spotId",
+  passport.authenticate("jwt", { session: false }),
+  spotAdd
 );
-router.put("/:userId/spots/:spotId", upload.single("image"), updateUser);
-router.get("/users", getUsers);
+
+router.put(
+  "/remove/:spotId",
+  passport.authenticate("jwt", { session: false }),
+  removeSpot
+);
+
+router.get("/", getUsers);
 module.exports = router;

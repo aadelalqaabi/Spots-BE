@@ -88,3 +88,4 @@ exports.updateOrganizer = async (req, res, next) => {
     next(err);
   }
 };
+

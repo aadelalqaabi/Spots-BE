@@ -23,7 +23,7 @@ app.use(passport.initialize());
 passport.use("user", userStrategy);
 passport.use("organizer", organizerStrategy);
 passport.use(jwtStrategy);
-app.use(userRoutes);
+app.use("/user", userRoutes);
 app.use("/organizer", organizerRoutes);
 app.use("/category", categoryRoutes);
 app.use("/spot", spotRoutes);
