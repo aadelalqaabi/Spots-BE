@@ -22,8 +22,7 @@ exports.userStrategy = new LocalStrategy(async (username, password, done) => {
   }
 });
 
-exports.organizerStrategy = new LocalStrategy(
-  async (username, password, done) => {
+exports.organizerStrategy = new LocalStrategy(async (username, password, done) => {
     try {
       const organizer = await Organizer.findOne({ username });
       let isMatch = true;
@@ -32,10 +31,9 @@ exports.organizerStrategy = new LocalStrategy(
       } else {
         isMatch = false;
       }
-      if (isMatch) {
-        console.log(organizer);
+      if (isMatch)
         return done(null, organizer);
-      } else return done(null, false);
+      else return done(null, false);
     } catch (error) {
       done(error);
     }

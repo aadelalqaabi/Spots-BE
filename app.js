@@ -4,6 +4,9 @@ const passport = require("passport");
 const path = require("path");
 const userRoutes = require("./api/users/users.routes");
 const organizerRoutes = require("./api/organizers/organizers.routes");
+const categoryRoutes = require("./api/categories/categories.routes");
+const spotRoutes = require("./api/spots/spots.routes");
+const reviewRoutes = require("./api/reviews/reviews.routes");
 const cors = require("cors");
 const {
   organizerStrategy,
@@ -17,11 +20,14 @@ connectDb();
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(passport.initialize());
-passport.use(userStrategy);
-passport.use(organizerStrategy);
+passport.use("user", userStrategy);
+passport.use("organizer", organizerStrategy);
 passport.use(jwtStrategy);
 app.use(userRoutes);
 app.use("/organizer", organizerRoutes);
+app.use("/category", categoryRoutes);
+app.use("/spot", spotRoutes);
+app.use("/review", reviewRoutes);
 
 app.use((req, res, next) => {
   const err = new Error("Not Found");
