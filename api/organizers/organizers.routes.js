@@ -26,7 +26,7 @@ router.param("organizerId", async (req, res, next, organizerId) => {
 router.post("/register", upload.single("image"), register);
 router.post(
   "/login",
-  passport.authenticate("local", { session: false }),
+  passport.authenticate("organizer", { session: false }),
   login
 );
 router.put(
