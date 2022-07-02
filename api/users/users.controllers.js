@@ -2,6 +2,7 @@ const User = require("../../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET, JWT_EXPIRATION_MS } = require("../../config/keys");
+const Spot = require("../../models/Spot");
 
 exports.login = async (req, res, next) => {
   try {
@@ -50,7 +51,7 @@ exports.register = async (req, res, next) => {
 
 exports.getUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find().populate("spots");
     res.status(201).json(users);
   } catch (err) {
     res.status(500).json("Server Error");
@@ -77,5 +78,49 @@ exports.updateUser = async (req, res, next) => {
     res.status(200).json(user);
   } catch (err) {
     next(err);
+  }
+};
+
+exports.spotAdd = async (req, res, next) => {
+  const { spotId } = req.params;
+  try {
+    await Spot.findByIdAndUpdate(spotId, {
+      $push: { users: req.user._id },
+    });
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { $push: { spots: spotId } },
+      {
+        new: true,
+      }
+    ).select("-password");
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.removeSpot = async (req, res, next) => {
+  const { spotId } = req.params;
+  try {
+    await Spot.findByIdAndUpdate(
+      { _id: spotId },
+      {
+        $pull: { users: req.user._id },
+      }
+    );
+
+    const user = await User.findByIdAndUpdate(
+      { _id: req.user._id },
+      {
+        $pull: { spots: spotId },
+      },
+      {
+        new: true,
+      }
+    ).select("-password");
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
   }
 };

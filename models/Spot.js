@@ -20,12 +20,8 @@ const SpotSchema = new mongoose.Schema({
   startDate: Date,
   endDate: Date,
   seats: Number,
-  days: [
-    {
-      day: Number,
-      seats: Number,
-    },
-  ],
+  numOfDays: { type: Number, default: 1 },
+  days: Array,
   price: Number,
   reviews: [
     {
