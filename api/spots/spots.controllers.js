@@ -13,19 +13,18 @@ exports.getSpots = async (req, res, next) => {
 
 exports.spotsCreate = async (req, res, next) => {
   const { categoryId } = req.params;
-  //   req.body.organizer = req.organizer._id;
+    req.body.organizer = req.user._id;
   req.body.category = categoryId;
   if (req.file) {
     req.body.image = `/uploads/${req.file.filename}`;
   }
-
+  const completeSpot = days(req.body);
   try {
-    const completeSpot = await days(req.body);
+   
     const newSpot = await Spot.create(completeSpot);
-    console.log(completeSpot);
-    // await Organizer.findByIdAndUpdate(req.organizer._id, {
-    //   $push: { spots: newSpot._id },
-    // });
+    await Organizer.findByIdAndUpdate(req.user._id, {
+      $push: { spots: newSpot._id },
+    });
     await Category.findByIdAndUpdate(categoryId, {
       $push: { spots: newSpot._id },
     });
@@ -68,12 +67,19 @@ exports.fetchSpot = async (spotId, next) => {
 };
 
 days = (newSpot) => {
-  // console.log(newSpot);
+  console.log(newSpot);
+  newSpot.days.pop();
   for (let i = 0; i < newSpot.numOfDays; i++) {
     newSpot.days.push({
-      day: newSpot.startDate + i,
+      day: newSpot.spotDate.day + i,
       seats: newSpot.seats,
     });
   }
+  newSpot.startDate = new Date(
+     `${newSpot.spotDate.year}/
+      ${newSpot.spotDate.month}/
+      ${newSpot.spotDate.day}`
+  )
+  console.log("newSpot.startDate: "+newSpot.startDate);
   return newSpot;
 };

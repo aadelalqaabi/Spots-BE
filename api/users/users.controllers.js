@@ -8,7 +8,7 @@ exports.login = async (req, res, next) => {
   try {
     const { user } = req;
     const payload = {
-      id: user.id,
+      id: user._id,
       username: user.username,
       email: user.email,
       image: user.image,
@@ -39,6 +39,9 @@ exports.register = async (req, res, next) => {
   const { password } = req.body;
   const saltRounds = 10;
   try {
+    if (req.file) {
+      req.body.image = `/uploads/${req.file.filename}`;
+    }
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     req.body.password = hashedPassword;
     const newUser = await User.create(req.body);

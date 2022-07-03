@@ -17,7 +17,12 @@ const SpotSchema = new mongoose.Schema({
   },
   isFree: { type: Boolean, default: "true" },
   startTime: String,
-  startDate: Date,
+  spotDate: {
+    year: Number,
+    month: Number,
+    day: Number,
+  },
+  startDate: {type: Date, default:Date.now()},
   endDate: Date,
   seats: Number,
   numOfDays: { type: Number, default: 1 },

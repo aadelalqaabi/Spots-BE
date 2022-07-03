@@ -27,7 +27,7 @@ exports.reviewCreate = async (req, res, next) => {
 
 exports.getReviews = async (req, res, next) => {
   try {
-    const reviews = await Review.find().populate("spot");
+    const reviews = await Review.find().populate("user");
     res.json(reviews);
   } catch (error) {
     next(error);

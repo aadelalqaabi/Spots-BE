@@ -4,9 +4,8 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const { JWT_SECRET } = require("../config/keys");
 const { fromAuthHeaderAsBearerToken } = require("passport-jwt/lib/extract_jwt");
-const Organizer = require("../models/Organizer");
 
-exports.userStrategy = new LocalStrategy(async (username, password, done) => {
+exports.localStrategyUser = new LocalStrategy(async (username, password, done) => {
   try {
     const user = await User.findOne({ username });
     let isMatch = true;
@@ -22,25 +21,7 @@ exports.userStrategy = new LocalStrategy(async (username, password, done) => {
   }
 });
 
-exports.organizerStrategy = new LocalStrategy(async (username, password, done) => {
-    try {
-      const organizer = await Organizer.findOne({ username });
-      let isMatch = true;
-      if (organizer) {
-        isMatch = await bcrypt.compare(password, organizer.password);
-      } else {
-        isMatch = false;
-      }
-      if (isMatch)
-        return done(null, organizer);
-      else return done(null, false);
-    } catch (error) {
-      done(error);
-    }
-  }
-);
-
-exports.jwtStrategy = new JWTStrategy(
+exports.jwtStrategyUser = new JWTStrategy(
   { jwtFromRequest: fromAuthHeaderAsBearerToken(), secretOrKey: JWT_SECRET },
   async (jwtPayload, done) => {
     if (Date.now() > jwtPayload.exp) {
