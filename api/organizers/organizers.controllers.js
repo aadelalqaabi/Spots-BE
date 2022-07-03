@@ -5,8 +5,7 @@ const { JWT_SECRET, JWT_EXPIRATION_MS } = require("../../config/keys");
 
 exports.login = async (req, res, next) => {
   try {
-    console.log(req);
-    const { organizer } = req;
+    const organizer  = req.user;
     const payload = {
       id: organizer.id,
       username: organizer.username,
@@ -43,6 +42,9 @@ exports.register = async (req, res, next) => {
   const { password } = req.body;
   const saltRounds = 10;
   try {
+    if (req.file) {
+      req.body.image = `/uploads/${req.file.filename}`;
+    }
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     req.body.password = hashedPassword;
     const newOrganizer = await Organizer.create(req.body);
@@ -55,7 +57,7 @@ exports.register = async (req, res, next) => {
 
 exports.getOrganizers = async (req, res) => {
   try {
-    const organizers = await Organizer.find();
+    const organizers = await Organizer.find().populate("spots");
     res.status(201).json(organizers);
   } catch (err) {
     res.status(500).json("Server Error");
