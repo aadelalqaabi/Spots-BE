@@ -24,7 +24,7 @@ router.param("organizerId", async (req, res, next, organizerId) => {
 });
 
 router.post("/register", upload.single("image"), register);
-router.post("/login", passport.authenticate("local", { session: false }), login);
+router.post("/login", passport.authenticate("Org", { session: false }), login);
 router.put(
   "/:organizerId/spots/:spotId",
   upload.single("image"),
