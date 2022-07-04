@@ -25,8 +25,8 @@ connectDb();
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(passport.initialize());
-passport.use(localStrategyUser);
-passport.use(localStrategyOrg);
+passport.use("user", localStrategyUser);
+passport.use("Org", localStrategyOrg);
 passport.use(jwtStrategyUser);
 passport.use(jwtStrategyOrg);
 

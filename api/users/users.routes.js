@@ -26,7 +26,7 @@ router.param("userId", async (req, res, next, userId) => {
 });
 
 router.post("/register", upload.single("image"), register);
-router.post("/login", passport.authenticate("local", { session: false }), login);
+router.post("/login", passport.authenticate("user", { session: false }), login);
 router.put("/", upload.single("image"), updateUser);
 
 router.put(

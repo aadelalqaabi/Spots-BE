@@ -6,7 +6,7 @@ const validateEmail = (email) => {
 };
 
 const OrganizerSchema = new mongoose.Schema({
-  username: String,
+  username: {type: String, unique: true},
   email: {
     type: String,
     required: true,
@@ -16,6 +16,7 @@ const OrganizerSchema = new mongoose.Schema({
       /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/,
       "Please fill a valid email address",
     ],
+    unique: true,
   },
   password: String,
   phone: String,
