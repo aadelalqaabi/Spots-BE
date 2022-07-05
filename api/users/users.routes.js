@@ -27,17 +27,17 @@ router.param("userId", async (req, res, next, userId) => {
 
 router.post("/register", upload.single("image"), register);
 router.post("/login", passport.authenticate("user", { session: false }), login);
-router.put("/", upload.single("image"), updateUser);
+router.put("/update", upload.single("image"), passport.authenticate("userJWT", { session: false }), updateUser);
 
 router.put(
   "/spots/:spotId",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate("userJWT", { session: false }),
   spotAdd
 );
 
 router.put(
   "/remove/:spotId",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate("userJWT", { session: false }),
   removeSpot
 );
 

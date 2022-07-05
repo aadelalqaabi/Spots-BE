@@ -26,9 +26,9 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(passport.initialize());
 passport.use("user", localStrategyUser);
-passport.use("Org", localStrategyOrg);
-passport.use(jwtStrategyUser);
-passport.use(jwtStrategyOrg);
+passport.use("org", localStrategyOrg);
+passport.use("userJWT", jwtStrategyUser);
+passport.use("orgJWT", jwtStrategyOrg);
 
 //Routes
 app.use("/user", userRoutes);
