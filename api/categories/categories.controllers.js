@@ -10,6 +10,10 @@ exports.fetchCategory = async (categoryId, next) => {
 };
 
 exports.categoryCreate = async (req, res, next) => {
+  if (req.file) {
+    req.body.image = `/uploads/${req.file.filename}`;
+  }
+  
   try {
     const newCategory = await Category.create(req.body);
     res.status(201).json(newCategory);

@@ -4,7 +4,7 @@ const Category = require("../../models/Category");
 
 exports.getSpots = async (req, res, next) => {
   try {
-    const spots = await Spot.find().populate("category");
+    const spots = await Spot.find().populate("category users");
     res.status(201).json(spots);
   } catch (err) {
     next(err);
@@ -18,10 +18,10 @@ exports.spotsCreate = async (req, res, next) => {
   if (req.file) {
     req.body.image = `/uploads/${req.file.filename}`;
   }
-  const completeSpot = days(req.body);
+  // const completeSpot = days(req.body);
   try {
    
-    const newSpot = await Spot.create(completeSpot);
+    const newSpot = await Spot.create(req.body);
     await Organizer.findByIdAndUpdate(req.user._id, {
       $push: { spots: newSpot._id },
     });
