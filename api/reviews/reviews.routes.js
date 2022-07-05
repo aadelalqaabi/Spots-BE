@@ -20,7 +20,7 @@ router.param("reviewId", async (req, res, next, spotId) => {
   }
 });
 
-router.post("/:spotId", passport.authenticate("jwt", { session: false }), reviewCreate);
+router.post("/:spotId", passport.authenticate("userJWT", { session: false }), reviewCreate);
 router.get("/", getReviews);
 
 module.exports = router;
