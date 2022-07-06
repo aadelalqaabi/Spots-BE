@@ -4,7 +4,8 @@ const Category = require("../../models/Category");
 
 exports.getSpots = async (req, res, next) => {
   try {
-    const spots = await Spot.find().populate("category users");
+    const spots = await Spot.find().populate("organizer users category");
+
     res.status(201).json(spots);
   } catch (err) {
     next(err);
@@ -13,14 +14,13 @@ exports.getSpots = async (req, res, next) => {
 
 exports.spotsCreate = async (req, res, next) => {
   const { categoryId } = req.params;
-    req.body.organizer = req.user._id;
+  req.body.organizer = req.user._id;
   req.body.category = categoryId;
   if (req.file) {
     req.body.image = `/uploads/${req.file.filename}`;
   }
   // const completeSpot = days(req.body);
   try {
-   
     const newSpot = await Spot.create(req.body);
     await Organizer.findByIdAndUpdate(req.user._id, {
       $push: { spots: newSpot._id },
@@ -76,10 +76,10 @@ days = (newSpot) => {
     });
   }
   newSpot.startDate = new Date(
-     `${newSpot.spotDate.year}/
+    `${newSpot.spotDate.year}/
       ${newSpot.spotDate.month}/
       ${newSpot.spotDate.day}`
-  )
-  console.log("newSpot.startDate: "+newSpot.startDate);
+  );
+  console.log("newSpot.startDate: " + newSpot.startDate);
   return newSpot;
 };
