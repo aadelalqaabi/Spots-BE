@@ -7,16 +7,10 @@ const Spot = require("../../models/Spot");
 exports.login = async (req, res, next) => {
   try {
     const { user } = req;
-    const payload = {
-      id: user._id,
-      username: user.username,
-      email: user.email,
-      image: user.image,
-      spots: user.spots,
-      exp: Date.now() + JWT_EXPIRATION_MS,
-    };
-    const token = jwt.sign(payload, JWT_SECRET);
-    res.status(201).json({ token });
+    const token = generateToken(user);
+    console.log("JWT_SECRET: "+JWT_SECRET);
+    console.log("JWT_EXPIRATION_MS: "+JWT_EXPIRATION_MS);
+    res.status(200).json({ token });
   } catch (err) {
     next(err);
   }
@@ -54,7 +48,7 @@ exports.register = async (req, res, next) => {
 
 exports.getUsers = async (req, res) => {
   try {
-    const users = await User.find().populate("spots");
+    const users = await User.find().populate("spots").select("-password");
     res.status(201).json(users);
   } catch (err) {
     res.status(500).json("Server Error");

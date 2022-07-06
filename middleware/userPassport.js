@@ -24,6 +24,7 @@ exports.localStrategyUser = new LocalStrategy(async (username, password, done) =
 exports.jwtStrategyUser = new JWTStrategy(
   { jwtFromRequest: fromAuthHeaderAsBearerToken(), secretOrKey: JWT_SECRET },
   async (jwtPayload, done) => {
+    console.log("here");
     if (Date.now() > jwtPayload.exp) {
       return done(null, false);
     }

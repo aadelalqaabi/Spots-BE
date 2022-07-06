@@ -5,7 +5,7 @@ const { JWT_SECRET, JWT_EXPIRATION_MS } = require("../../config/keys");
 
 exports.login = async (req, res, next) => {
   try {
-    const organizer  = req.user;
+    const organizer = req.user;
     const payload = {
       id: organizer.id,
       username: organizer.username,
@@ -57,7 +57,9 @@ exports.register = async (req, res, next) => {
 
 exports.getOrganizers = async (req, res) => {
   try {
-    const organizers = await Organizer.find().populate("spots");
+    const organizers = await Organizer.find()
+      .populate("spots")
+      .select("-password");
     res.status(201).json(organizers);
   } catch (err) {
     res.status(500).json("Server Error");
@@ -90,4 +92,3 @@ exports.updateOrganizer = async (req, res, next) => {
     next(err);
   }
 };
-
