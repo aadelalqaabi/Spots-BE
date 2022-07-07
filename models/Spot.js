@@ -11,12 +11,12 @@ const SpotSchema = new mongoose.Schema({
   },
   description: String,
   details: String,
+  startTime: String,
   organizer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Organizer",
   },
   isFree: { type: Boolean, default: "true" },
-  startTime: String,
   spotDate: {
     year: Number,
     month: Number,
