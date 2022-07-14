@@ -81,7 +81,7 @@ exports.updateOrganizer = async (req, res, next) => {
       req.body.image = `/uploads/${req.file.filename}`;
     }
     const organizer = await Organizer.findByIdAndUpdate(
-      req.organizer._id,
+      req.user._id,
       req.body,
       {
         new: true,

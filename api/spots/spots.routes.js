@@ -26,9 +26,9 @@ router.param("spotId", async (req, res, next, spotId) => {
 router.post(
   "/cat/:categoryId", passport.authenticate("orgJWT", { session: false }), upload.single("image"), spotsCreate); 
 
-router.delete("/:spotId", deleteSpot);
+router.delete("/delete/:spotId", passport.authenticate("orgJWT", { session: false }), deleteSpot);
 
-router.put("/:spotId", upload.single("image"), updateSpot);
+router.put("/update/:spotId/cat/:categoryId", upload.single("image"), updateSpot);
 
 router.get("/", getSpots);
 
