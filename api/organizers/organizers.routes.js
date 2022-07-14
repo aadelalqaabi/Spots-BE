@@ -25,10 +25,11 @@ router.param("organizerId", async (req, res, next, organizerId) => {
 
 router.post("/register", upload.single("image"), register);
 router.post("/login", passport.authenticate("org", { session: false }), login);
-router.put(
-  "/:organizerId/spots/:spotId",
-  upload.single("image"),
-  updateOrganizer
-);
+router.put("/update", upload.single("image"), passport.authenticate("orgJWT", { session: false }), updateOrganizer);
+// router.put(
+//   "/:organizerId/spots/:spotId",
+//   upload.single("image"),
+//   updateOrganizer
+// );
 router.get("/", getOrganizers);
 module.exports = router;
