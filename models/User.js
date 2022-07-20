@@ -6,7 +6,7 @@ const validateEmail = (email) => {
 };
 
 const UserSchema = new mongoose.Schema({
-  username: {type: String, unique: true},
+  username: { type: String, unique: true },
   password: String,
   email: {
     type: String,
@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
     ],
     unique: true,
   },
-  image: String,
+  image: { type: String, default: "/uploads/default.png" },
   spots: [
     {
       type: mongoose.Schema.Types.ObjectId,

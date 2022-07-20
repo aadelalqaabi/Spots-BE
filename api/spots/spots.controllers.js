@@ -4,7 +4,7 @@ const Category = require("../../models/Category");
 
 exports.getSpots = async (req, res, next) => {
   try {
-    const spots = await Spot.find().populate("organizer users category");
+    const spots = await Spot.find().populate("users");
     res.status(201).json(spots);
   } catch (err) {
     next(err);
@@ -18,9 +18,9 @@ exports.spotsCreate = async (req, res, next) => {
   if (req.file) {
     req.body.image = `/uploads/${req.file.filename}`;
   }
-  const completeSpot = days(req.body);
+  // const completeSpot = days(req.body);
   try {
-    const newSpot = await Spot.create(completeSpot);
+    const newSpot = await Spot.create(req.body);
     await Organizer.findByIdAndUpdate(req.user._id, {
       $push: { spots: newSpot._id },
     });
@@ -36,7 +36,7 @@ exports.spotsCreate = async (req, res, next) => {
 exports.updateSpot = async (req, res, next) => {
   const spotId = req.params.spotId;
   const categoryId = req.params.categoryId;
-  // let spot = req.body; 
+  // let spot = req.body;
 
   // if(req.body.isFree === false && req.body.numOfDays === 1){
   //   const completeSpot = daysUpdate(req.body);
@@ -45,11 +45,12 @@ exports.updateSpot = async (req, res, next) => {
     if (req.file) {
       req.body.image = `/uploads/${req.file.filename}`;
     }
-    if(req.body.category !== categoryId ){
+    console.log(`old id  ${req.body.category} vs new id ${categoryId}`);
+    if (req.body.category !== categoryId) {
       console.log("Changed");
       console.log(req.body._id);
       await Category.findByIdAndUpdate(req.body.category, {
-          $pull: { spots: spotId },
+        $pull: { spots: spotId },
       });
       await Category.findByIdAndUpdate(categoryId, {
         $push: { spots: spotId },
@@ -57,7 +58,7 @@ exports.updateSpot = async (req, res, next) => {
       req.body.category = categoryId;
     }
     const spot = await Spot.findByIdAndUpdate(spotId, req.body, {
-        new: true,
+      new: true,
     });
     res.status(200).json(spot);
   } catch (err) {
@@ -92,10 +93,10 @@ days = (newSpot) => {
   console.log(newSpot);
   // newSpot.days.pop();
   newSpot.days = [];
- const plus = newSpot.startDate;
- const minus= plus.slice(8,10);
- const dayNum = parseInt(minus)
- console.log(dayNum)
+  const plus = newSpot.startDate;
+  const minus = plus.slice(8, 10);
+  const dayNum = parseInt(minus);
+  console.log(dayNum);
   for (let i = 0; i < newSpot.numOfDays; i++) {
     newSpot.days.push({
       day: dayNum + i,
@@ -119,16 +120,17 @@ days = (newSpot) => {
 daysUpdate = (oldSpot) => {
   console.log(oldSpot);
   daysOBJ = JSON.stringify(oldSpot.days);
-  console.log("days :"+daysOBJ);
-  if(oldSpot.isFree === true){
+  console.log("days :" + daysOBJ);
+  if (oldSpot.isFree === true) {
     return oldSpot;
-  } else{
-    if(oldSpot.numOfDays <= 1){
+  } else {
+    if (oldSpot.numOfDays <= 1) {
       oldSpot.seats = parseInt(oldSpot.seats) + parseInt(oldSpot.addSeats);
       return oldSpot;
-    } else{
+    } else {
       for (let i = 0; i < parseInt(oldSpot.numOfDays); i++) {
-        oldSpot.days.seats = parseInt(oldSpot.days.seats) + parseInt(oldSpot.addSeats);
+        oldSpot.days.seats =
+          parseInt(oldSpot.days.seats) + parseInt(oldSpot.addSeats);
       }
       return oldSpot;
     }
