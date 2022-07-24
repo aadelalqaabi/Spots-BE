@@ -8,7 +8,7 @@ const {
   getReviews,
 } = require("./reviews.controllers");
 
-router.param("reviewId", async (req, res, next, spotId) => {
+router.param("reviewId", async (req, res, next, reviewId) => {
   const review = await fetchReview(reviewId, next);
   if (review) {
     req.review = review;
@@ -20,7 +20,11 @@ router.param("reviewId", async (req, res, next, spotId) => {
   }
 });
 
-router.post("/:spotId", passport.authenticate("userJWT", { session: false }), reviewCreate);
+router.post(
+  "/:spotId",
+  passport.authenticate("userJWT", { session: false }),
+  reviewCreate
+);
 router.get("/", getReviews);
 
 module.exports = router;
