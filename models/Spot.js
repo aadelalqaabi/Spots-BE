@@ -36,6 +36,12 @@ const SpotSchema = new mongoose.Schema({
       ref: "Review",
     },
   ],
+  offers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Offer",
+    },
+  ],
   users: [
     {
       type: mongoose.Schema.Types.ObjectId,
