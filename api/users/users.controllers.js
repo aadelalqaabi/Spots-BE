@@ -23,6 +23,7 @@ const generateToken = (user) => {
     email: user.email,
     image: user.image,
     spots: user.spots,
+    tickets: user.tickets,
     exp: Date.now() + JWT_EXPIRATION_MS,
   };
   const token = jwt.sign(payload, JWT_SECRET);

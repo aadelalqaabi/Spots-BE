@@ -8,6 +8,7 @@ const categoryRoutes = require("./api/categories/categories.routes");
 const spotRoutes = require("./api/spots/spots.routes");
 const reviewRoutes = require("./api/reviews/reviews.routes");
 const offerRoutes = require("./api/offers/offers.routes");
+const ticketRoutes = require("./api/tickets/tickets.routes");
 const cors = require("cors");
 const {
   localStrategyUser,
@@ -38,6 +39,7 @@ app.use("/category", categoryRoutes);
 app.use("/spot", spotRoutes);
 app.use("/review", reviewRoutes);
 app.use("/offer", offerRoutes);
+app.use("/ticket", ticketRoutes);
 
 //
 app.use((req, res, next) => {

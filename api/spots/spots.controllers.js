@@ -4,7 +4,7 @@ const Category = require("../../models/Category");
 
 exports.getSpots = async (req, res, next) => {
   try {
-    const spots = await Spot.find().populate("users");
+    const spots = await Spot.find().populate("users category");
     res.status(201).json(spots);
   } catch (err) {
     next(err);
