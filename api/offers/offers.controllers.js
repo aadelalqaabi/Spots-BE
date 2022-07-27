@@ -27,6 +27,19 @@ exports.offerCreate = async (req, res, next) => {
   }
 };
 
+exports.deleteOffer = async (req, res, next) => {
+  const { offerId } = req.params;
+  try {
+    await Offer.findByIdAndRemove({ _id: offerId });
+    await Spot.findByIdAndUpdate(req.user._id, {
+      $pull: { offers: offerId },
+    });
+    res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.getOffers = async (req, res, next) => {
   try {
     const offers = await Offer.find();

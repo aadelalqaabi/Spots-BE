@@ -3,7 +3,12 @@ const passport = require("passport");
 const upload = require("../../middleware/multer");
 const router = express.Router();
 
-const { fetchOffer, offerCreate, getOffers } = require("./offers.controllers");
+const {
+  fetchOffer,
+  offerCreate,
+  getOffers,
+  deleteOffer,
+} = require("./offers.controllers");
 
 router.param("offerId", async (req, res, next, offerId) => {
   const offer = await fetchOffer(offerId, next);
@@ -24,5 +29,11 @@ router.post(
   offerCreate
 );
 router.get("/", getOffers);
+
+router.delete(
+  "/delete/:offerId",
+  passport.authenticate("orgJWT", { session: false }),
+  deleteOffer
+);
 
 module.exports = router;
