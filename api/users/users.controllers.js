@@ -8,8 +8,6 @@ exports.login = async (req, res, next) => {
   try {
     const { user } = req;
     const token = generateToken(user);
-    console.log("JWT_SECRET: "+JWT_SECRET);
-    console.log("JWT_EXPIRATION_MS: "+JWT_EXPIRATION_MS);
     res.status(200).json({ token });
   } catch (err) {
     next(err);

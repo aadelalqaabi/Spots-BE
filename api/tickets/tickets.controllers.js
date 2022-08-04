@@ -31,7 +31,7 @@ exports.ticketCreate = async (req, res, next) => {
 
 exports.getTickets = async (req, res, next) => {
   try {
-    const tickets = await Ticket.find().populate("user");
+    const tickets = await Ticket.find().populate("spot");
     res.json(tickets);
   } catch (error) {
     next(error);

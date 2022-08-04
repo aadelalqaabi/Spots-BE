@@ -45,10 +45,8 @@ exports.updateSpot = async (req, res, next) => {
     if (req.file) {
       req.body.image = `/uploads/${req.file.filename}`;
     }
-    console.log(`old id  ${req.body.category} vs new id ${categoryId}`);
     if (req.body.category !== categoryId) {
       console.log("Changed");
-      console.log(req.body._id);
       await Category.findByIdAndUpdate(req.body.category, {
         $pull: { spots: spotId },
       });
