@@ -5,8 +5,8 @@ const bcrypt = require("bcrypt");
 const { JWT_SECRET } = require("../config/keys");
 const { fromAuthHeaderAsBearerToken } = require("passport-jwt/lib/extract_jwt");
 
-exports.localStrategyOrg = new LocalStrategy(async (username, password, done) => {
-  console.log("hello");
+exports.localStrategyOrg = new LocalStrategy(
+  async (username, password, done) => {
     try {
       const organizer = await Organizer.findOne({ username });
       let isMatch = true;
@@ -15,8 +15,7 @@ exports.localStrategyOrg = new LocalStrategy(async (username, password, done) =>
       } else {
         isMatch = false;
       }
-      if (isMatch)
-        return done(null, organizer);
+      if (isMatch) return done(null, organizer);
       else return done(null, false);
     } catch (error) {
       done(error);
