@@ -11,6 +11,7 @@ const {
   updateUser,
   spotAdd,
   removeSpot,
+  rewardAdd,
 } = require("./users.controllers");
 
 router.param("userId", async (req, res, next, userId) => {
@@ -27,12 +28,22 @@ router.param("userId", async (req, res, next, userId) => {
 
 router.post("/register", upload.single("image"), register);
 router.post("/login", passport.authenticate("user", { session: false }), login);
-router.put("/update", upload.single("image"), passport.authenticate("userJWT", { session: false }), updateUser);
+router.put(
+  "/update",
+  upload.single("image"),
+  passport.authenticate("userJWT", { session: false }),
+  updateUser
+);
 
 router.put(
   "/spots/:spotId",
   passport.authenticate("userJWT", { session: false }),
   spotAdd
+);
+router.put(
+  "/rewards/:rewardId",
+  passport.authenticate("userJWT", { session: false }),
+  rewardAdd
 );
 
 router.put(

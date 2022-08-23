@@ -29,7 +29,7 @@ exports.updatePoint = async (req, res, next) => {
     const point = await Point.findByIdAndUpdate(pointId, req.body, {
       new: true,
     });
-    res.status(201).json(point);
+    res.status(200).json(point);
   } catch (err) {
     next(err);
   }

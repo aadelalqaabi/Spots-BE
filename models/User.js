@@ -32,6 +32,12 @@ const UserSchema = new mongoose.Schema({
       ref: "Ticket",
     },
   ],
+  rewards: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Reward",
+    },
+  ],
 });
 
 module.exports = mongoose.model("User", UserSchema);
