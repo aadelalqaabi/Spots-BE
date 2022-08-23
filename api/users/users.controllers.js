@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET, JWT_EXPIRATION_MS } = require("../../config/keys");
 const Spot = require("../../models/Spot");
+const Reward = require("../../models/Reward");
 
 exports.login = async (req, res, next) => {
   try {
@@ -22,6 +23,7 @@ const generateToken = (user) => {
     image: user.image,
     spots: user.spots,
     tickets: user.tickets,
+    rewards: user.rewards,
     exp: Date.now() + JWT_EXPIRATION_MS,
   };
   const token = jwt.sign(payload, JWT_SECRET);
@@ -86,6 +88,25 @@ exports.spotAdd = async (req, res, next) => {
     const user = await User.findByIdAndUpdate(
       req.user._id,
       { $push: { spots: spotId } },
+      {
+        new: true,
+      }
+    ).select("-password");
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.rewardAdd = async (req, res, next) => {
+  const { rewardId } = req.params;
+  try {
+    await Reward.findByIdAndUpdate(rewardId, {
+      $push: { users: req.user._id },
+    });
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { $push: { rewards: rewardId } },
       {
         new: true,
       }
