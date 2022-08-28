@@ -6,9 +6,11 @@ const { JWT_SECRET } = require("../config/keys");
 const { fromAuthHeaderAsBearerToken } = require("passport-jwt/lib/extract_jwt");
 
 exports.localStrategyUser = new LocalStrategy(
-  async (username, password, done) => {
+  async (phone, password, done) => {
+  // async (username, password, done) => {
     try {
-      const user = await User.findOne({ username });
+      const user = await User.findOne({ phone });
+      // const user = await User.findOne({ username });
       let isMatch = true;
       if (user) {
         isMatch = await bcrypt.compare(password, user.password);
