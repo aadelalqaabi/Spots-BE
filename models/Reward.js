@@ -2,7 +2,9 @@ const mongoose = require("mongoose");
 
 const RewardSchema = new mongoose.Schema({
   description: String,
+  descriptionAr: String,
   title: String,
+  titleAr: String,
   image: String,
   points: Number,
   // isMultiClaim: { type: Boolean, default: true },

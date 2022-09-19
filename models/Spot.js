@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const SpotSchema = new mongoose.Schema({
   name: String,
+  nameAr: String,
   image: String,
   video: String,
   location: String,
@@ -10,7 +11,9 @@ const SpotSchema = new mongoose.Schema({
     ref: "Category",
   },
   description: String,
+  descriptionAr: String,
   details: String,
+  detailsAr: String,
   announcement: String,
   startTime: String,
   organizer: {
