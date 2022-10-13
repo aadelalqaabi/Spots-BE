@@ -8,6 +8,7 @@ const {
   rewardCreate,
   getRewards,
   deleteReward,
+  userAdd,
 } = require("./reward.controllers");
 
 router.param("rewardId", async (req, res, next, rewardId) => {
@@ -34,6 +35,12 @@ router.delete(
   "/delete/:rewardId",
   passport.authenticate("orgJWT", { session: false }),
   deleteReward
+);
+
+router.put(
+  "/user/:rewardId",
+  passport.authenticate("userJWT", { session: false }),
+  userAdd
 );
 
 module.exports = router;
