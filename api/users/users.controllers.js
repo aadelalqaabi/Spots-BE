@@ -66,6 +66,40 @@ exports.fetchUser = async (userId, next) => {
   }
 };
 
+exports.changePassword = async (req, res, next) => {
+  const { username, newPassword } = req.body;
+  const saltRounds = 10;
+  try {
+    //find user
+    const changeUser = await User.findOne({ username });
+    //hash Password
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    changeUser.password = hashedPassword;
+    //Update Password & generate token 
+    await User.findByIdAndUpdate(changeUser._id, changeUser)
+    res.status(201);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.forgotPassword = async (req, res, next) => {
+  const { username, newPassword } = req.body;
+  const saltRounds = 10;
+  try {
+    //find user
+    const changeUser = await User.findOne({ username });
+    //hash Password
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    changeUser.password = hashedPassword;
+    //Update Password & generate token 
+    await User.findByIdAndUpdate(changeUser._id, changeUser)
+    res.status(204);
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.updateUser = async (req, res, next) => {
   try {
     if (req.file) {
@@ -140,5 +174,26 @@ exports.removeSpot = async (req, res, next) => {
     res.status(200).json(user);
   } catch (error) {
     next(error);
+  }
+};
+
+exports.generateOTP = async (req, res) => {
+  try {
+    const minmum = 100000;
+    const maxmum = 999999;
+    const OTP = Math.floor(Math.random() * (maxmum - minmum + 1)) + minmum;
+    res.status(200).json(OTP);
+  } catch (err) {
+    res.status(500).json("Server Error");
+  }
+};
+
+
+exports.getUsernames = async (req, res) => {
+  try {
+    const usernames = await User.find().select("username");
+    res.status(201).json(usernames);
+  } catch (err) {
+    res.status(500).json("Server Error");
   }
 };
