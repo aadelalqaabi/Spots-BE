@@ -67,17 +67,23 @@ exports.fetchUser = async (userId, next) => {
 };
 
 exports.changePassword = async (req, res, next) => {
-  const { username, newPassword } = req.body;
+  const { username, newPassword, currentPassword } = req.body;
   const saltRounds = 10;
   try {
     //find user
     const changeUser = await User.findOne({ username });
-    //hash Password
-    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-    changeUser.password = hashedPassword;
-    //Update Password & generate token 
-    await User.findByIdAndUpdate(changeUser._id, changeUser)
-    res.status(201);
+    //Unhash Password
+    const isMatch = await bcrypt.compare(currentPassword, changeUser.password)
+    if(isMatch){
+      //hash Password
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+      changeUser.password = hashedPassword;
+      //Update Password & generate token 
+      await User.findByIdAndUpdate(changeUser._id, changeUser)
+      res.status(200).json({ isChanged: true });
+    }else{
+      res.status(200).json({ isChanged: false })
+    }
   } catch (err) {
     next(err);
   }
@@ -183,6 +189,16 @@ exports.generateOTP = async (req, res) => {
     const maxmum = 999999;
     const OTP = Math.floor(Math.random() * (maxmum - minmum + 1)) + minmum;
     res.status(200).json(OTP);
+
+      // const emailContent = {
+      //   to_name: "I'm Just testing",
+      //   message: `You forgot your password huh, well hers your OTP ==>  ${OTP}, now just type this in and proceed  `,
+      //   to_email: "ab.test.task@gmail.com",
+      // };
+      // emailjs.init("0CGPMjHzm16JAhRPl");
+      // // emailjs.accessToken("nHQDJbHUos1qKT50oPIoG")
+  
+      // emailjs.send("AB-Serv-12", "template_uma67do", emailContent);
   } catch (err) {
     res.status(500).json("Server Error");
   }
