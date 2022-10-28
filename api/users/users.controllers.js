@@ -1,7 +1,13 @@
 const User = require("../../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET, JWT_EXPIRATION_MS } = require("../../config/keys");
+const nodemailer = require("nodemailer");
+const {
+  JWT_SECRET,
+  JWT_EXPIRATION_MS,
+  GOTO_E_P,
+  GOTO_E_U,
+} = require("../../config/keys");
 const Spot = require("../../models/Spot");
 const Reward = require("../../models/Reward");
 
@@ -73,16 +79,16 @@ exports.changePassword = async (req, res, next) => {
     //find user
     const changeUser = await User.findOne({ username });
     //Unhash Password
-    const isMatch = await bcrypt.compare(currentPassword, changeUser.password)
-    if(isMatch){
+    const isMatch = await bcrypt.compare(currentPassword, changeUser.password);
+    if (isMatch) {
       //hash Password
       const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
       changeUser.password = hashedPassword;
-      //Update Password & generate token 
-      await User.findByIdAndUpdate(changeUser._id, changeUser)
+      //Update Password & generate token
+      await User.findByIdAndUpdate(changeUser._id, changeUser);
       res.status(200).json({ isChanged: true });
-    }else{
-      res.status(200).json({ isChanged: false })
+    } else {
+      res.status(200).json({ isChanged: false });
     }
   } catch (err) {
     next(err);
@@ -98,8 +104,8 @@ exports.forgotPassword = async (req, res, next) => {
     //hash Password
     const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
     changeUser.password = hashedPassword;
-    //Update Password & generate token 
-    await User.findByIdAndUpdate(changeUser._id, changeUser)
+    //Update Password & generate token
+    await User.findByIdAndUpdate(changeUser._id, changeUser);
     res.status(204);
   } catch (err) {
     next(err);
@@ -190,20 +196,35 @@ exports.generateOTP = async (req, res) => {
     const OTP = Math.floor(Math.random() * (maxmum - minmum + 1)) + minmum;
     res.status(200).json(OTP);
 
-      // const emailContent = {
-      //   to_name: "I'm Just testing",
-      //   message: `You forgot your password huh, well hers your OTP ==>  ${OTP}, now just type this in and proceed  `,
-      //   to_email: "ab.test.task@gmail.com",
-      // };
-      // emailjs.init("0CGPMjHzm16JAhRPl");
-      // // emailjs.accessToken("nHQDJbHUos1qKT50oPIoG")
-  
-      // emailjs.send("AB-Serv-12", "template_uma67do", emailContent);
+    {
+      /* let transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 25,
+      auth: {
+        user: process.env.GOTO_E_U,
+        pass: process.env.GOTO_E_P,
+      },
+    });
+
+    let mailOptions = {
+      from: GOTO_E_U,
+      to: "adelalqaapi1998@gmail.com",
+      subject: `The subject goes here`,
+    };
+
+    transporter.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(info);
+      }
+    });
+  */
+    }
   } catch (err) {
     res.status(500).json("Server Error");
   }
 };
-
 
 exports.getUsernames = async (req, res) => {
   try {
