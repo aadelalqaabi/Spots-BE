@@ -7,8 +7,15 @@ const { fromAuthHeaderAsBearerToken } = require("passport-jwt/lib/extract_jwt");
 
 exports.localStrategyOrg = new LocalStrategy(
   async (username, password, done) => {
+    let organizer = {};
+    const isEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi.test(username);
     try {
-      const organizer = await Organizer.findOne({ username });
+      if(isEmail){
+        const email = username;
+        organizer = await Organizer.findOne({ email });
+      } else{
+        organizer = await Organizer.findOne({ username });
+      }
       let isMatch = true;
       if (organizer) {
         isMatch = await bcrypt.compare(password, organizer.password);
