@@ -197,7 +197,7 @@ exports.generateOTP = async (req, res) => {
     res.status(200).json(OTP);
 
     {
-      /* let transporter = nodemailer.createTransport({
+      let transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 25,
       auth: {
@@ -219,7 +219,6 @@ exports.generateOTP = async (req, res) => {
         console.log(info);
       }
     });
-  */
     }
   } catch (err) {
     res.status(500).json("Server Error");

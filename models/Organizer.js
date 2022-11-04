@@ -7,6 +7,8 @@ const validateEmail = (email) => {
 
 const OrganizerSchema = new mongoose.Schema({
   username: {type: String, unique: true},
+  displayNameEn: String,
+  displayNameAr: String,
   email: {
     type: String,
     required: true,

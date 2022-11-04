@@ -13,6 +13,8 @@ exports.login = async (req, res, next) => {
       image: organizer.image,
       phone: organizer.phone,
       bio: organizer.bio,
+      displayNameEn: organizer.displayNameEn,
+      displayNameAr: organizer.displayNameAr,
       exp: Date.now() + JWT_EXPIRATION_MS,
     };
     const token = jwt.sign(payload, JWT_SECRET);
@@ -31,6 +33,8 @@ const generateToken = (organizer) => {
     phone: organizer.phone,
     bio: organizer.bio,
     spots: organizer.spots,
+    displayNameEn: organizer.displayNameEn,
+    displayNameAr: organizer.displayNameAr,
     exp: Date.now() + JWT_EXPIRATION_MS,
   };
   const token = jwt.sign(payload, JWT_SECRET);
