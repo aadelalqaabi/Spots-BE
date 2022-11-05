@@ -11,6 +11,7 @@ const offerRoutes = require("./api/offers/offers.routes");
 const rewardRoutes = require("./api/rewards/reward.routes");
 const ticketRoutes = require("./api/tickets/tickets.routes");
 const pointRoutes = require("./api/points/points.routes");
+const adRoutes = require("./api/ads/ads.routes");
 const cors = require("cors");
 const {
   localStrategyUser,
@@ -47,7 +48,7 @@ app.use("/offer", offerRoutes);
 app.use("/ticket", ticketRoutes);
 app.use("/reward", rewardRoutes);
 app.use("/point", pointRoutes);
-
+app.use("/ads", adRoutes);
 //
 app.use((req, res, next) => {
   const err = new Error("Not Found");
