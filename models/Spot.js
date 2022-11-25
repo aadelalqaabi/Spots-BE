@@ -15,6 +15,7 @@ const SpotSchema = new mongoose.Schema({
   details: String,
   detailsAr: String,
   announcement: String,
+  isAd: Boolean,
   startTime: String,
   organizer: {
     type: mongoose.Schema.Types.ObjectId,
