@@ -2,11 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const router = express.Router();
 
-const {
-  fetchAd,
-  adCreate,
-  getAds,
-} = require("./ads.controllers");
+const { fetchAd, adCreate, getAds, adRemove } = require("./ads.controllers");
 
 router.param("adId", async (req, res, next, adId) => {
   const ad = await fetchAd(adId, next);
@@ -21,6 +17,15 @@ router.param("adId", async (req, res, next, adId) => {
 });
 
 router.get("/", getAds);
-router.post("/add/:spotId", passport.authenticate("orgJWT", { session: false }), adCreate);
+router.post(
+  "/add/:spotId",
+  passport.authenticate("orgJWT", { session: false }),
+  adCreate
+);
+router.delete(
+  "/remove/:spotId",
+  passport.authenticate("orgJWT", { session: false }),
+  adRemove
+);
 
 module.exports = router;

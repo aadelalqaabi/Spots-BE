@@ -4,14 +4,18 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const {
   JWT_SECRET,
-  JWT_EXPIRATION_MS,
-  GOTO_E_P,
-  GOTO_E_U,
+  DEST_E_U,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  DEST_E_P,
+  GOOGLE_REFRESH_TOKEN,
 } = require("../../config/keys");
 const Spot = require("../../models/Spot");
 const Reward = require("../../models/Reward");
+const { countDocuments } = require("../../models/Reward");
 
 exports.login = async (req, res, next) => {
+  console.log("req", req.body);
   try {
     const { user } = req;
     const token = generateToken(user);
@@ -20,7 +24,6 @@ exports.login = async (req, res, next) => {
     next(err);
   }
 };
-
 const generateToken = (user) => {
   const payload = {
     id: user.id,
@@ -31,7 +34,6 @@ const generateToken = (user) => {
     spots: user.spots,
     tickets: user.tickets,
     rewards: user.rewards,
-    // exp: Date.now() + JWT_EXPIRATION_MS,
   };
   const token = jwt.sign(payload, JWT_SECRET);
   return token;
@@ -46,7 +48,16 @@ exports.register = async (req, res, next) => {
     }
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     req.body.password = hashedPassword;
-    const newUser = await User.create(req.body);
+    const newObject = {
+      email: req.body.email,
+      password: req.body.password,
+      phone: req.body.phone,
+      image: req.body.image,
+      username: req.body.username,
+    };
+    console.log("after", newObject);
+    const newUser = await User.create(newObject);
+    console.log("newUser", newUser);
     const token = generateToken(newUser);
     res.status(201).json({ token });
   } catch (err) {
@@ -198,27 +209,37 @@ exports.generateOTP = async (req, res) => {
 
     {
       let transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 25,
-      auth: {
-        user: process.env.GOTO_E_U,
-        pass: process.env.GOTO_E_P,
-      },
-    });
+        service: "gmail",
+        auth: {
+          type: "OAuth2",
+          user: DEST_E_U,
+          pass: DEST_E_P,
+          clientId: GOOGLE_CLIENT_ID,
+          clientSecret: GOOGLE_CLIENT_SECRET,
+          refreshToken: GOOGLE_REFRESH_TOKEN,
+        },
+      });
 
-    let mailOptions = {
-      from: GOTO_E_U,
-      to: "adelalqaapi1998@gmail.com",
-      subject: `The subject goes here`,
-    };
+      transporter.verify((err, success) => {
+        err
+          ? console.log(err)
+          : console.log(`=== Server is ready to take messages: ${success} ===`);
+      });
 
-    transporter.sendMail(mailOptions, function (err, info) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(info);
-      }
-    });
+      let mailOptions = {
+        from: `Dest <${DEST_E_P}>`,
+        to: "adelalqaapi1998@gmail.com",
+        subject: `Your Dest OTP`,
+        text: `Here is your OTP ${OTP}`,
+      };
+
+      transporter.sendMail(mailOptions, function (err, data) {
+        if (err) {
+          console.log("Error " + err);
+        } else {
+          console.log("Email sent successfully");
+        }
+      });
     }
   } catch (err) {
     res.status(500).json("Server Error");
@@ -229,6 +250,14 @@ exports.getUsernames = async (req, res) => {
   try {
     const usernames = await User.find().select("username");
     res.status(201).json(usernames);
+  } catch (err) {
+    res.status(500).json("Server Error");
+  }
+};
+exports.getEmails = async (req, res) => {
+  try {
+    const emails = await User.find().select("email");
+    res.status(201).json(emails);
   } catch (err) {
     res.status(500).json("Server Error");
   }

@@ -13,8 +13,18 @@ exports.adCreate = async (req, res, next) => {
   const { spotId } = req.params;
   req.body.spot = spotId;
   try {
-    const newAd = await Ad.create({ spot: spotId});
+    const newAd = await Ad.create({ spot: spotId });
     res.status(201).json(newAd);
+  } catch (error) {
+    next(error);
+  }
+};
+exports.adRemove = async (req, res, next) => {
+  const { spotId } = req.params;
+  req.body.spot = spotId;
+  try {
+    await Ad.remove({ spot: spotId });
+    res.status(201).end();
   } catch (error) {
     next(error);
   }
