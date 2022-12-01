@@ -1,18 +1,13 @@
 const User = require("../../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
 const {
   JWT_SECRET,
-  DEST_E_U,
-  GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET,
-  DEST_E_P,
-  GOOGLE_REFRESH_TOKEN,
 } = require("../../config/keys");
 const Spot = require("../../models/Spot");
 const Reward = require("../../models/Reward");
 const { countDocuments } = require("../../models/Reward");
+const {email} = require("../../middleware/email")
 
 exports.login = async (req, res, next) => {
   console.log("req", req.body);
@@ -205,42 +200,9 @@ exports.generateOTP = async (req, res) => {
     const minmum = 100000;
     const maxmum = 999999;
     const OTP = Math.floor(Math.random() * (maxmum - minmum + 1)) + minmum;
-    res.status(200).json(OTP);
-
-    {
-      let transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          type: "OAuth2",
-          user: DEST_E_U,
-          pass: DEST_E_P,
-          clientId: GOOGLE_CLIENT_ID,
-          clientSecret: GOOGLE_CLIENT_SECRET,
-          refreshToken: GOOGLE_REFRESH_TOKEN,
-        },
-      });
-
-      transporter.verify((err, success) => {
-        err
-          ? console.log(err)
-          : console.log(`=== Server is ready to take messages: ${success} ===`);
-      });
-
-      let mailOptions = {
-        from: `Dest <${DEST_E_P}>`,
-        to: "adelalqaapi1998@gmail.com",
-        subject: `Your Dest OTP`,
-        text: `Here is your OTP ${OTP}`,
-      };
-
-      transporter.sendMail(mailOptions, function (err, data) {
-        if (err) {
-          console.log("Error " + err);
-        } else {
-          console.log("Email sent successfully");
-        }
-      });
-    }
+    res.status(200).json(OTP)
+    // adelalqaapi1998@gmail.com
+    email("", `Your Dest OTP`, `Here is your OTP ${OTP}, also text me when you receive these just so that i know its working 👍 😅`)
   } catch (err) {
     res.status(500).json("Server Error");
   }
