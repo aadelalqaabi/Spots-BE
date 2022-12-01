@@ -2,6 +2,7 @@ const Organizer = require("../../models/Organizer");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET, JWT_EXPIRATION_MS } = require("../../config/keys");
+const { email } = require("../../middleware/email");
 
 exports.login = async (req, res, next) => {
   try {
@@ -42,6 +43,7 @@ const generateToken = (organizer) => {
 };
 
 exports.register = async (req, res, next) => {
+  console.log('req.body', req.body)
   const { password } = req.body;
   const saltRounds = 10;
   try {
@@ -50,9 +52,11 @@ exports.register = async (req, res, next) => {
     }
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     req.body.password = hashedPassword;
-    const newOrganizer = await Organizer.create(req.body);
-    const token = generateToken(newOrganizer);
-    res.status(201).json({ token });
+    await Organizer.create(req.body); 
+    //TODO create a good email structure and test
+    email(req.body.email, `Dest Application Accepted`, `Hello ${req.body.username}, Congratiolations your Dest application has been accepted, go to this link <-- Dest LINK --> and use Username: ${req.body.username}, Password: ${password} to login 👍`)
+    // const token = generateToken(newOrganizer);
+    res.status(201).json("registered");
   } catch (err) {
     next(err);
   }
@@ -93,5 +97,48 @@ exports.updateOrganizer = async (req, res, next) => {
     res.status(200).json(organizer);
   } catch (err) {
     next(err);
+  }
+};
+
+exports.changePassword = async (req, res, next) => {
+  const { username, newPassword, currentPassword } = req.body;
+  const saltRounds = 10;
+  try {
+    //find user
+    const changeUser = await Organizer.findOne({ username });
+    //Unhash Password
+    const isMatch = await bcrypt.compare(currentPassword, changeUser.password);
+    if (isMatch) {
+      //hash Password
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+      changeUser.password = hashedPassword;
+      //Update Password & generate token
+      await Organizer.findByIdAndUpdate(changeUser._id, changeUser);
+      console.log('first', newPassword)
+      res.status(200).json({ isChanged: true });
+    } else {
+      res.status(200).json({ isChanged: false });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.forgotPassword = async (req, res, next) => {
+  const { username } = req.body;
+  const saltRounds = 10;
+  try {
+    //find user
+    const changeUser = await User.findOne({ username });
+    //hash Password
+    const newPassword = new Array(12).fill().map(() => String.fromCharCode(Math.random()*86+40)).join("")
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    changeUser.password = hashedPassword;
+    //Update Password & generate token
+    await User.findByIdAndUpdate(changeUser._id, changeUser);
+    email(req.body.email, `Dest Password Change`, `Hello ${req.body.username}, your password has been changed, use this new Password: ${password} to login 👍`)
+    res.status(204);
+  } catch (err) {
+    next(err); 
   }
 };

@@ -9,6 +9,8 @@ const {
   getOrganizers,
   fetchOrganizer,
   updateOrganizer,
+  changePassword,
+  forgotPassword
 } = require("./organizers.controllers");
 
 router.param("organizerId", async (req, res, next, organizerId) => {
@@ -22,8 +24,8 @@ router.param("organizerId", async (req, res, next, organizerId) => {
     next(err);
   }
 });
-
-router.post("/register", upload.single("image"), register);
+// , passport.authenticate("orgJWT", { session: false })
+router.post("/register", upload.single("image"), register); 
 router.post("/login", passport.authenticate("org", { session: false }), login);
 router.put("/update", upload.single("image"), passport.authenticate("orgJWT", { session: false }), updateOrganizer);
 // router.put(
@@ -32,4 +34,10 @@ router.put("/update", upload.single("image"), passport.authenticate("orgJWT", { 
 //   updateOrganizer
 // );
 router.get("/", getOrganizers);
+router.put("/forgot", forgotPassword);
+router.put(
+  "/change",
+  passport.authenticate("orgJWT", { session: false }),
+  changePassword
+);
 module.exports = router;
