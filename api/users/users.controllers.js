@@ -1,13 +1,11 @@
 const User = require("../../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const {
-  JWT_SECRET,
-} = require("../../config/keys");
+const { JWT_SECRET } = require("../../config/keys");
 const Spot = require("../../models/Spot");
 const Reward = require("../../models/Reward");
 const { countDocuments } = require("../../models/Reward");
-const {email} = require("../../middleware/email")
+const { email } = require("../../middleware/email");
 
 exports.login = async (req, res, next) => {
   console.log("req", req.body);
@@ -200,9 +198,8 @@ exports.generateOTP = async (req, res) => {
     const minmum = 100000;
     const maxmum = 999999;
     const OTP = Math.floor(Math.random() * (maxmum - minmum + 1)) + minmum;
-    res.status(200).json(OTP)
-    // adelalqaapi1998@gmail.com
-    email("", `Your Dest OTP`, `Here is your OTP ${OTP}, also text me when you receive these just so that i know its working 👍 😅`)
+    res.status(200).json(OTP);
+    email("adelalqaapi@gmail.com", `Your Dest OTP`, `${OTP}`);
   } catch (err) {
     res.status(500).json("Server Error");
   }

@@ -7,5 +7,5 @@ module.exports = {
     "681847638127-9tkkh81j8bafsfvj9eqqv22q5lq2os5q.apps.googleusercontent.com",
   GOOGLE_CLIENT_SECRET: "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",
   GOOGLE_REFRESH_TOKEN:
-    "1//04W56xEeVrig7CgYIARAAGAQSNwF-L9IrcpmIMJQeRJc2l_UKh0mTyc-AR6-JEQqTCkiKvMD2U2npglRoM0TxVaFiVktY8c5B5aI",
+    "1//047tTKjydYAUaCgYIARAAGAQSNwF-L9IrdLMu-1Xnwxk7c4uca312YhRipwABQMiBeXkdcy6CDnfsop5nYSaLwviEPwlaRat7ZSk",
 };
