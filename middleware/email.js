@@ -10,7 +10,7 @@ const hbs = require("nodemailer-express-handlebars");
 
 const path = require("path");
 
-exports.email = async (emailTo, emailSubject, emailText) => {
+exports.email = async (template, emailTo, emailSubject, emailText) => {
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -40,15 +40,22 @@ exports.email = async (emailTo, emailSubject, emailText) => {
       extName: ".handlebars",
     })
   );
-
+  console.log("email.text", emailText);
   let mailOptions = {
     from: `Dest <${DEST_E_P}>`,
     to: emailTo,
     subject: emailSubject,
-    text: emailText,
-    template: "index",
+    template: template,
     context: {
-      name: emailText,
+      OTP: emailText,
+      name: emailText.name,
+      amount: emailText.amount,
+      details: emailText.details,
+      date: emailText.startDate,
+      time: emailText.startTime,
+      image: emailText.image,
+      user: emailText.user,
+      id: emailText.id,
     },
   };
 

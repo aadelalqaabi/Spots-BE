@@ -199,7 +199,7 @@ exports.generateOTP = async (req, res) => {
     const maxmum = 999999;
     const OTP = Math.floor(Math.random() * (maxmum - minmum + 1)) + minmum;
     res.status(200).json(OTP);
-    email("adelalqaapi@gmail.com", `Your Dest OTP`, `${OTP}`);
+    email("OTP", "adelalqaapi@gmail.com", `Your Dest OTP`, `${OTP}`);
   } catch (err) {
     res.status(500).json("Server Error");
   }

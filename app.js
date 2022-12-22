@@ -25,6 +25,7 @@ const {
 } = require("./middleware/organizerPassport");
 const session = require("express-session");
 const { JWT_SECRET } = require("./config/keys");
+const { AppleStrategy } = require("./middleware/ApplePassport");
 
 const app = express();
 
@@ -53,6 +54,7 @@ passport.use("org", localStrategyOrg);
 passport.use("userJWT", jwtStrategyUser);
 passport.use("orgJWT", jwtStrategyOrg);
 passport.use("google", GoogleStrategy);
+passport.use("apple", AppleStrategy);
 
 //google
 app.get(
@@ -69,6 +71,19 @@ app.get(
   }
 );
 
+//apple
+app.get("/auth/apple", passport.authenticate("apple"));
+
+app.get(
+  "/auth/apple/callback",
+  passport.authenticate("apple", { failureRedirect: "/login" }),
+  (req, res) => {
+    res.redirect(
+      `exp://127.0.0.1:19000/--/login?email=${req.user.email}/sub=${req.user.sub}`
+    );
+  }
+);
+
 //Routes
 app.use("/user", userRoutes);
 app.use("/organizer", organizerRoutes);
@@ -78,7 +93,8 @@ app.use("/review", reviewRoutes);
 app.use("/offer", offerRoutes);
 app.use("/ticket", ticketRoutes);
 app.use("/reward", rewardRoutes);
-app.use("/point", pointRoutes);applicationRoutes
+app.use("/point", pointRoutes);
+applicationRoutes;
 app.use("/ads", adRoutes);
 app.use("/application", applicationRoutes);
 //
