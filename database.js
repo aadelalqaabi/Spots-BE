@@ -1,13 +1,11 @@
 const mongoose = require("mongoose");
+const { MONGODB_DATABASE } = require("./config/keys");
 
 const connectDB = async () => {
-  const conn = await mongoose.connect(
-    "mongodb+srv://admin:admin@cluster0.ja85l.mongodb.net/?retryWrites=true&w=majority",
-    {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-    }
-  );
+  const conn = await mongoose.connect(MONGODB_DATABASE, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
 
   console.log(`mongo connected: ${conn.connection.host}`);
 };

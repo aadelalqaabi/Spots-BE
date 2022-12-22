@@ -31,11 +31,12 @@ const SpotSchema = new mongoose.Schema({
   startDate: { type: Date, default: Date.now() },
   endDate: Date,
   seats: Number,
+  seatsRemaining: Number,
   addSeats: { type: Number, default: 1 },
   numOfDays: { type: Number, default: 1 },
   days: [],
   price: Number,
-  spotRevenue: { type: Number, default: 0 },
+  spotRevenue: Number,
   reviews: [
     {
       type: mongoose.Schema.Types.ObjectId,
