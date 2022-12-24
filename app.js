@@ -28,6 +28,7 @@ const { JWT_SECRET } = require("./config/keys");
 const { AppleStrategy } = require("./middleware/ApplePassport");
 
 const app = express();
+const port = 8000;
 
 //middleware
 app.use(cors());
@@ -118,6 +119,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(8000, () => {
-  console.log("The application is running on localhost:8000");
+app.listen(port, () => {
+  console.log("The application is running on localhost:3000");
 });
