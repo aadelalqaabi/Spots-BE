@@ -40,7 +40,11 @@ app.use(
     secret: JWT_SECRET,
   })
 );
+app.use(express.static(path.join(__dirname, "build")));
 
+app.get("/", function (req, res) {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.json({ limit: "10mb", extended: true }));
 app.use(
