@@ -31,7 +31,7 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 //middleware
-app.use(cors((origin = "*")));
+app.use(cors());
 connectDb();
 app.use(
   session({
