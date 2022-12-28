@@ -119,6 +119,26 @@ app.use((err, req, res, next) => {
   });
 });
 
+if (process.env.NODE_ENV === "production") {
+  app.use(
+    express.static(path.join(__dirname, "home/ubuntu/Spot-FE-Organizer/build"))
+  );
+
+  app.get("*", (req, res) =>
+    res.sendFile(
+      path.resolve(
+        __dirname,
+        "home/ubuntu/",
+        "Spot-FE-Organizer",
+        "build",
+        "index.html"
+      )
+    )
+  );
+} else {
+  app.get("/", (req, res) => res.send("Please set to production"));
+}
+
 app.listen(port, () => {
   console.log("The application is running on localhost:3000");
 });
