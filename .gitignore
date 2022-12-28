@@ -105,3 +105,4 @@ dist
 
 # SECRET KEY
 .keys
+.env
