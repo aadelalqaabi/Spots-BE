@@ -121,15 +121,17 @@ app.use((err, req, res, next) => {
 
 if (process.env.NODE_ENV === "production") {
   app.use(
-    express.static(path.join(__dirname, "home/ubuntu/Spot-FE-Organizer/build"))
+    express.static(
+      path.join(__dirname, "/home/ubuntu/Spots-FE-Organizer/build")
+    )
   );
 
   app.get("*", (req, res) =>
     res.sendFile(
       path.resolve(
         __dirname,
-        "home/ubuntu/",
-        "Spot-FE-Organizer",
+        "/home/ubuntu/",
+        "Spots-FE-Organizer",
         "build",
         "index.html"
       )
