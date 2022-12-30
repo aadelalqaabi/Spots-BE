@@ -28,7 +28,7 @@ const { JWT_SECRET } = require("./config/keys");
 const { AppleStrategy } = require("./middleware/ApplePassport");
 
 const app = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 3000;
 
 //middleware
 app.use(cors());
@@ -87,7 +87,7 @@ app.get(
 
 //Routes
 app.use("/user", userRoutes);
-app.use("/organizer", organizerRoutes);
+app.use("/api/organizer", organizerRoutes);
 app.use("/category", categoryRoutes);
 app.use("/spot", spotRoutes);
 app.use("/review", reviewRoutes);
