@@ -87,7 +87,7 @@ app.get(
 
 //Routes
 app.use("/user", userRoutes);
-app.use("/api/organizer", organizerRoutes);
+app.use("/organizer", organizerRoutes);
 app.use("/category", categoryRoutes);
 app.use("/spot", spotRoutes);
 app.use("/review", reviewRoutes);
