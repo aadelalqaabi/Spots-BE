@@ -86,18 +86,18 @@ app.get(
 );
 
 //Routes
-app.use("/user", userRoutes);
-app.use("/organizer", organizerRoutes);
-app.use("/category", categoryRoutes);
-app.use("/spot", spotRoutes);
-app.use("/review", reviewRoutes);
-app.use("/offer", offerRoutes);
-app.use("/ticket", ticketRoutes);
-app.use("/reward", rewardRoutes);
-app.use("/point", pointRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/organizer", organizerRoutes);
+app.use("/api/category", categoryRoutes);
+app.use("/api/spot", spotRoutes);
+app.use("/api/review", reviewRoutes);
+app.use("/api/offer", offerRoutes);
+app.use("/api/ticket", ticketRoutes);
+app.use("/api/reward", rewardRoutes);
+app.use("/api/point", pointRoutes);
 applicationRoutes;
-app.use("/ads", adRoutes);
-app.use("/application", applicationRoutes);
+app.use("/api/ads", adRoutes);
+app.use("/api/application", applicationRoutes);
 //
 app.use((req, res, next) => {
   const err = new Error("Not Found");
@@ -118,28 +118,6 @@ app.use((err, req, res, next) => {
     },
   });
 });
-
-if (process.env.NODE_ENV === "production") {
-  app.use(
-    express.static(
-      path.join(__dirname, "/home/ubuntu/Spots-FE-Organizer/build")
-    )
-  );
-
-  app.get("*", (req, res) =>
-    res.sendFile(
-      path.resolve(
-        __dirname,
-        "/home/ubuntu/",
-        "Spots-FE-Organizer",
-        "build",
-        "index.html"
-      )
-    )
-  );
-} else {
-  app.get("/", (req, res) => res.send("Please set to production"));
-}
 
 app.listen(port, () => {
   console.log("The application is running on localhost:3000");
