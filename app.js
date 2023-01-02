@@ -41,7 +41,7 @@ app.use(
   })
 );
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.json({ limit: "10mb", extended: true }));
 app.use(
   express.urlencoded({ limit: "10mb", extended: true, parameterLimit: 50000 })
