@@ -1,0 +1,10 @@
+{
+  "applinks": {
+      "apps": [],
+      "details": [{
+          "appID": "com.dest.kuwait", 
+          "paths": ["/universal/*"]
+          }
+      ]
+  }
+}
