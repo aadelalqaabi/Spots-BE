@@ -24,7 +24,7 @@ exports.ticketCreate = async (req, res, next) => {
       spotId,
       "name nameAr details detailsAr startTime startDate"
     );
-    const user = await User.findById(req.body.user, "username");
+    const user = await User.findById(req.body.user, "name");
     let ticket = {
       amount: req.body.amount,
       name: req.body.locale === ("en-US" || "en") ? spot.name : spot.nameAr,
@@ -36,7 +36,7 @@ exports.ticketCreate = async (req, res, next) => {
           : req.body.startDateAr,
       startTime: spot.startTime,
       image: spot.image,
-      user: user.username,
+      user: user.name,
     };
     delete req.body.locale;
     delete req.body.startDateAr;

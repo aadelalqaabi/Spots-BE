@@ -20,7 +20,8 @@ exports.login = async (req, res, next) => {
 const generateToken = (user) => {
   const payload = {
     id: user.id,
-    username: user.username,
+    // username: user.username,
+    name: user.name,
     email: user.email,
     phone: user.phone,
     image: user.image,
@@ -33,6 +34,7 @@ const generateToken = (user) => {
 };
 
 exports.register = async (req, res, next) => {
+  //console.log(req);
   const { password } = req.body;
   const saltRounds = 10;
   try {
@@ -46,7 +48,8 @@ exports.register = async (req, res, next) => {
       password: req.body.password,
       phone: req.body.phone,
       image: req.body.image,
-      username: req.body.username,
+      // username: req.body.username,
+      name: req.body.name,
     };
     console.log("after", newObject);
     const newUser = await User.create(newObject);
@@ -77,11 +80,12 @@ exports.fetchUser = async (userId, next) => {
 };
 
 exports.changePassword = async (req, res, next) => {
-  const { username, newPassword, currentPassword } = req.body;
+  //const { username, newPassword, currentPassword } = req.body;
+  const { email, newPassword, currentPassword } = req.body;
   const saltRounds = 10;
   try {
     //find user
-    const changeUser = await User.findOne({ username });
+    const changeUser = await User.findOne({ email });
     //Unhash Password
     const isMatch = await bcrypt.compare(currentPassword, changeUser.password);
     if (isMatch) {
@@ -100,11 +104,11 @@ exports.changePassword = async (req, res, next) => {
 };
 
 exports.forgotPassword = async (req, res, next) => {
-  const { username, newPassword } = req.body;
+  const { email, newPassword } = req.body;
   const saltRounds = 10;
   try {
     //find user
-    const changeUser = await User.findOne({ username });
+    const changeUser = await User.findOne({ email });
     //hash Password
     const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
     changeUser.password = hashedPassword;
@@ -205,14 +209,16 @@ exports.generateOTP = async (req, res) => {
   }
 };
 
-exports.getUsernames = async (req, res) => {
+{
+  /* exports.getUsernames = async (req, res) => {
   try {
     const usernames = await User.find().select("username");
     res.status(201).json(usernames);
   } catch (err) {
     res.status(500).json("Server Error");
   }
-};
+}; */
+}
 exports.getEmails = async (req, res) => {
   try {
     const emails = await User.find().select("email");

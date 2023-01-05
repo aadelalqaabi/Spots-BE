@@ -15,7 +15,7 @@ const {
   changePassword,
   forgotPassword,
   generateOTP,
-  getUsernames,
+  //getUsernames,
   getEmails,
 } = require("./users.controllers");
 
@@ -64,6 +64,6 @@ router.put(
 );
 
 router.get("/", getUsers);
-router.get("/usernames", getUsernames);
+//router.get("/usernames", getUsernames);
 router.get("/emails", getEmails);
 module.exports = router;
