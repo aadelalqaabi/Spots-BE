@@ -8,29 +8,25 @@ const { fromAuthHeaderAsBearerToken } = require("passport-jwt/lib/extract_jwt");
 
 exports.localStrategyUser = new LocalStrategy(
   // async (phone, password, done) => {
-  async (username, password, done) => {
-    console.log("username", username);
-    console.log("password", password);
+  async (email, password, done) => {
     let user = {};
     const isEmail =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi.test(
-        username
+        email
       );
     try {
       if (isEmail) {
-        const email = username;
+        //const email = email;
+        console.log("isEmail", isEmail);
         user = await User.findOne({ email });
-      } else {
-        user = await User.findOne({ username });
-      }
+      } //else {
+      // user = await User.findOne({ username });
+      // }
       let isMatch = true;
       if (user) {
         isMatch = await bcrypt.compare(password, user.password);
-        console.log("isMatch", isMatch);
-        console.log("ismatch user", user);
       } else {
         isMatch = false;
-        console.log("isMatch", isMatch);
       }
       if (isMatch) return done(null, user);
       else return done(null, false);

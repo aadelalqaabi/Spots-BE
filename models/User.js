@@ -6,7 +6,8 @@ const validateEmail = (email) => {
 };
 
 const UserSchema = new mongoose.Schema({
-  username: { type: String, unique: true },
+  //username: { type: String, unique: true },
+  name: String,
   password: String,
   phone: String,
   email: {
