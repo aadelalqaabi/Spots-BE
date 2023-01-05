@@ -10,7 +10,7 @@ module.exports = {
     "681847638127-9tkkh81j8bafsfvj9eqqv22q5lq2os5q.apps.googleusercontent.com",
   GOOGLE_CLIENT_SECRET: "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",
   GOOGLE_REFRESH_TOKEN:
-    "1//047tTKjydYAUaCgYIARAAGAQSNwF-L9IrdLMu-1Xnwxk7c4uca312YhRipwABQMiBeXkdcy6CDnfsop5nYSaLwviEPwlaRat7ZSk",
+    "1//04YzKuPA9cEXaCgYIARAAGAQSNwF-L9IruCOUq3t1vmZbLA3fmJyFwjuzQH6eF3yPL2T2IfekAv6xCk1fDJUmGVnfOPJlGuKlt24",
   MONGODB_DATABASE:
     "mongodb+srv://destkuwaitabdullahadel:0hpd5967HAM87Rp3@cluster0.r66hzka.mongodb.net/?retryWrites=true&w=majority",
 };

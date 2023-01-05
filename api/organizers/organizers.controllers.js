@@ -43,7 +43,7 @@ const generateToken = (organizer) => {
 };
 
 exports.register = async (req, res, next) => {
-  console.log('req.body', req.body)
+  console.log("req.body", req.body);
   const { password } = req.body;
   const saltRounds = 10;
   try {
@@ -52,9 +52,13 @@ exports.register = async (req, res, next) => {
     }
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     req.body.password = hashedPassword;
-    await Organizer.create(req.body); 
+    await Organizer.create(req.body);
     //TODO create a good email structure and test
-    email(req.body.email, `Dest Application Accepted`, `Hello ${req.body.username}, Congratiolations your Dest application has been accepted, go to this link <-- Dest LINK --> and use Username: ${req.body.username}, Password: ${password} to login 👍`)
+    email(
+      req.body.email,
+      `Dest Application Accepted`,
+      `Hello ${req.body.username}, Congratulations your Dest application has been accepted, go to this link <-- Dest LINK --> and use Username: ${req.body.username}, Password: ${password} to login 👍`
+    );
     // const token = generateToken(newOrganizer);
     res.status(201).json("registered");
   } catch (err) {
@@ -114,7 +118,7 @@ exports.changePassword = async (req, res, next) => {
       changeUser.password = hashedPassword;
       //Update Password & generate token
       await Organizer.findByIdAndUpdate(changeUser._id, changeUser);
-      console.log('first', newPassword)
+      console.log("first", newPassword);
       res.status(200).json({ isChanged: true });
     } else {
       res.status(200).json({ isChanged: false });
@@ -131,14 +135,21 @@ exports.forgotPassword = async (req, res, next) => {
     //find user
     const changeUser = await User.findOne({ username });
     //hash Password
-    const newPassword = new Array(12).fill().map(() => String.fromCharCode(Math.random()*86+40)).join("")
+    const newPassword = new Array(12)
+      .fill()
+      .map(() => String.fromCharCode(Math.random() * 86 + 40))
+      .join("");
     const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
     changeUser.password = hashedPassword;
     //Update Password & generate token
     await User.findByIdAndUpdate(changeUser._id, changeUser);
-    email(req.body.email, `Dest Password Change`, `Hello ${req.body.username}, your password has been changed, use this new Password: ${password} to login 👍`)
+    email(
+      req.body.email,
+      `Dest Password Change`,
+      `Hello ${req.body.username}, your password has been changed, use this new Password: ${password} to login 👍`
+    );
     res.status(204);
   } catch (err) {
-    next(err); 
+    next(err);
   }
 };
