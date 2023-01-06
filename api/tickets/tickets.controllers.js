@@ -46,7 +46,7 @@ exports.ticketCreate = async (req, res, next) => {
       $push: { tickets: newTicket._id },
     });
     ticket = { ...ticket, id: newTicket._id };
-    email("ticket", "adelalqaapi@gmail.com", `Your Dest Ticket`, ticket);
+    email("ticket", req.user.email, `Your Dest Ticket`, ticket);
     res.status(200).json(newTicket);
   } catch (error) {
     next(error);

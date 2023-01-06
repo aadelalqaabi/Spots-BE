@@ -8,7 +8,6 @@ const { countDocuments } = require("../../models/Reward");
 const { email } = require("../../middleware/email");
 
 exports.login = async (req, res, next) => {
-  console.log("req", req.body);
   try {
     const { user } = req;
     const token = generateToken(user);
@@ -34,7 +33,6 @@ const generateToken = (user) => {
 };
 
 exports.register = async (req, res, next) => {
-  //console.log(req);
   const { password } = req.body;
   const saltRounds = 10;
   try {
@@ -51,9 +49,7 @@ exports.register = async (req, res, next) => {
       // username: req.body.username,
       name: req.body.name,
     };
-    console.log("after", newObject);
     const newUser = await User.create(newObject);
-    console.log("newUser", newUser);
     const token = generateToken(newUser);
     res.status(201).json({ token });
   } catch (err) {

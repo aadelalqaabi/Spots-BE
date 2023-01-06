@@ -46,7 +46,6 @@ exports.updateSpot = async (req, res, next) => {
       req.body.image = `/uploads/${req.file.filename}`;
     }
     if (req.body.category !== categoryId) {
-      console.log("Changed");
       await Category.findByIdAndUpdate(req.body.category, {
         $pull: { spots: spotId },
       });
@@ -88,13 +87,11 @@ exports.fetchSpot = async (spotId, next) => {
 };
 
 days = (newSpot) => {
-  console.log(newSpot);
   // newSpot.days.pop();
   newSpot.days = [];
   const plus = newSpot.startDate;
   const minus = plus.slice(8, 10);
   const dayNum = parseInt(minus);
-  console.log(dayNum);
   for (let i = 0; i < newSpot.numOfDays; i++) {
     newSpot.days.push({
       day: dayNum + i,
@@ -116,9 +113,7 @@ days = (newSpot) => {
 };
 
 daysUpdate = (oldSpot) => {
-  console.log(oldSpot);
   daysOBJ = JSON.stringify(oldSpot.days);
-  console.log("days :" + daysOBJ);
   if (oldSpot.isFree === true) {
     return oldSpot;
   } else {

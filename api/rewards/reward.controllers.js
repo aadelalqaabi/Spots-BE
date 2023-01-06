@@ -42,7 +42,6 @@ exports.deleteReward = async (req, res, next) => {
 
 exports.userAdd = async (req, res, next) => {
   const { rewardId } = req.params;
-  console.log(rewardId);
   try {
     const reward = await Reward.findByIdAndUpdate(rewardId, {
       $push: { users: req.user._id },

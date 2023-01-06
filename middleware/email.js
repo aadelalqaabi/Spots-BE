@@ -40,10 +40,9 @@ exports.email = async (template, emailTo, emailSubject, emailText) => {
       extName: ".handlebars",
     })
   );
-  console.log("email.text", emailText);
   let mailOptions = {
     from: `Dest <${DEST_E_P}>`,
-    to: emailTo,
+    to: `${emailTo}`,
     subject: emailSubject,
     template: template,
     context: {
