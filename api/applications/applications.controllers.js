@@ -41,7 +41,6 @@ exports.rejectionEmail = async (req, res, next) => {
   try {
     //TODO create an email for error scenarios
     // email(req.body.email, `Dest Application Rejected`, `Hello ${req.body.username}, Unfortunetly your Dest application has been Rejected, but you can always try again`)
-    console.log("hello from email rejection 👋")
     res.status(200).json("email sent succesfully");
   } catch (error) {
     next(error);

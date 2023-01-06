@@ -43,7 +43,6 @@ const generateToken = (organizer) => {
 };
 
 exports.register = async (req, res, next) => {
-  console.log("req.body", req.body);
   const { password } = req.body;
   const saltRounds = 10;
   try {
@@ -118,7 +117,6 @@ exports.changePassword = async (req, res, next) => {
       changeUser.password = hashedPassword;
       //Update Password & generate token
       await Organizer.findByIdAndUpdate(changeUser._id, changeUser);
-      console.log("first", newPassword);
       res.status(200).json({ isChanged: true });
     } else {
       res.status(200).json({ isChanged: false });

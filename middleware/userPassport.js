@@ -17,7 +17,6 @@ exports.localStrategyUser = new LocalStrategy(
     try {
       if (isEmail) {
         //const email = email;
-        console.log("isEmail", isEmail);
         user = await User.findOne({ email });
       } //else {
       // user = await User.findOne({ username });

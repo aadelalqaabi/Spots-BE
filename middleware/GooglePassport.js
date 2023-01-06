@@ -12,7 +12,6 @@ exports.GoogleStrategy = new GoogleStrategy(
   google,
   async (accessToken, refreshToken, bearerToken, profile, done) => {
     done(null, user(profile));
-    console.log(profile);
   }
 );
 
