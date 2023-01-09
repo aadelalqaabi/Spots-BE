@@ -5,7 +5,7 @@ const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = require("../config/keys");
 const google = {
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://destkw.com/user/login/google/callback",
+  callbackURL: "https://destkw.com/api/universal/user/login/google/callback",
 };
 
 exports.GoogleStrategy = new GoogleStrategy(
