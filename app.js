@@ -59,15 +59,15 @@ passport.use("apple", AppleStrategy);
 
 //google
 app.get(
-  "/api/universal/user/login/google",
+  "/universal/user/login/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 app.get(
-  "/api/universal/user/login/google/callback",
+  "/universal/user/login/google/callback",
   passport.authenticate("google", { failureRedirect: "/auth/google" }),
   (req, res) => {
     res.redirect(
-      `https://destkw.com/api/universal/Login?email=${req.user.email}/sub=${req.user.sub}`
+      `https://destkw.com/universal/Login?email=${req.user.email}/sub=${req.user.sub}`
     );
   }
 );
