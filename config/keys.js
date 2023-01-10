@@ -9,6 +9,8 @@ module.exports = {
   GOOGLE_CLIENT_ID:
     "681847638127-9tkkh81j8bafsfvj9eqqv22q5lq2os5q.apps.googleusercontent.com",
   GOOGLE_CLIENT_SECRET: "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",
+  GOOGLE_CLIENT_ID_IOS:
+    "681847638127-uoomo2qdte1447nl8kp0457h9vo18jek.apps.googleusercontent.com",
   GOOGLE_REFRESH_TOKEN:
     "1//04YzKuPA9cEXaCgYIARAAGAQSNwF-L9IruCOUq3t1vmZbLA3fmJyFwjuzQH6eF3yPL2T2IfekAv6xCk1fDJUmGVnfOPJlGuKlt24",
   MONGODB_DATABASE:
