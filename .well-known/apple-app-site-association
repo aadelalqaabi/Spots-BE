@@ -3,7 +3,7 @@
       "apps": [],
       "details": [{
           "appID": "LJ5LWR5ZLJ.com.dest.kuwait", 
-          "paths": ["/universal/*"]
+          "paths": ["/Login/*"]
           }
       ]
   }
