@@ -67,20 +67,20 @@ app.get(
   passport.authenticate("google", { failureRedirect: "/auth/google" }),
   (req, res) => {
     res.redirect(
-      `https://destkw.com/universal/Login?email=${req.user.email}/sub=${req.user.sub}`
+      `com.dest.kuwait://Login/email=${req.user.email}/sub=${req.user.sub}`
     );
   }
 );
 
 //apple
-app.get("/api/universal/auth/apple", passport.authenticate("apple"));
+app.get("/universal/auth/apple", passport.authenticate("apple"));
 
 app.get(
-  "/api/universal/auth/apple/callback",
+  "/universal/auth/apple/callback",
   passport.authenticate("apple", { failureRedirect: "/login" }),
   (req, res) => {
     res.redirect(
-      `exp://127.0.0.1:19000/--/login?email=${req.user.email}/sub=${req.user.sub}`
+      `https://destkw.com/universal/Login?email=${req.user.email}/sub=${req.user.sub}`
     );
   }
 );
