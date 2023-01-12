@@ -10,7 +10,7 @@ const path = require("path");
 exports.AppleStrategy = new AppleStrategy(
   {
     clientID: APPLE_BUNDLE_ID,
-    callbackURL: "https://destkw.com/api/auth/apple/callback",
+    callbackURL: "https://destkw.com/api/auth/apple/callback/callback",
     teamId: APPLE_KEY_TEAM,
     keyIdentifier: APPLE_KEY_ID,
     privateKeyPath: path.join(__dirname, "./AuthKey_5TJZX4BHLC.p8"),
