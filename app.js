@@ -73,10 +73,10 @@ app.get(
 );
 
 //apple
-app.get("/universal/auth/apple", passport.authenticate("apple"));
+app.get("/api/universal/auth/apple/callback", passport.authenticate("apple"));
 
 app.get(
-  "/universal/auth/apple/callback",
+  "/universal/auth/apple/callback/callback",
   passport.authenticate("apple", { failureRedirect: "/login" }),
   (req, res) => {
     res.redirect(
