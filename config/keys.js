@@ -5,7 +5,7 @@ module.exports = {
   DEST_E_P: "MnLp2pwJk#4wf^zI",
   APPLE_KEY_ID: "5TJZX4BHLC",
   APPLE_KEY_TEAM: "LJ5LWR5ZLJ",
-  APPLE_BUNDLE_ID: "com.dest.dest",
+  APPLE_BUNDLE_ID: "com.dest.kuwait",
   GOOGLE_CLIENT_ID:
     "681847638127-9tkkh81j8bafsfvj9eqqv22q5lq2os5q.apps.googleusercontent.com",
   GOOGLE_CLIENT_SECRET: "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",
