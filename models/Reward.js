@@ -7,7 +7,6 @@ const RewardSchema = new mongoose.Schema({
   titleAr: String,
   image: String,
   points: Number,
-  // isMultiClaim: { type: Boolean, default: true },
   spot: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Spot",
