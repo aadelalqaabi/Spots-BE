@@ -14,7 +14,7 @@ exports.codeCreate = async (req, res, next) => {
   try {
     const newCodes = await Code.create(req.body);
     await Organizer.findByIdAndUpdate(req.user._id, {
-      $push: { spotsBought: newCodes._id },
+      $push: { codesBought: newCodes._id },
     });
     res.status(201).json(newCodes);
   } catch (error) {

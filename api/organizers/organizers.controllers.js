@@ -58,8 +58,8 @@ exports.register = async (req, res, next) => {
       `Dest Application Accepted`,
       `Hello ${req.body.username}, Congratulations your Dest application has been accepted, go to this link <-- Dest LINK --> and use Username: ${req.body.username}, Password: ${password} to login 👍`
     );
-    // const token = generateToken(newOrganizer);
-    res.status(201).json("registered");
+    const token = generateToken(newOrganizer);
+    res.status(201).json(token);
   } catch (err) {
     next(err);
   }

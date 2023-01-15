@@ -25,7 +25,7 @@ const OrganizerSchema = new mongoose.Schema({
   phone: String,
   image: String,
   bio: String,
-  spotsBought: [
+  codesBought: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Code",
