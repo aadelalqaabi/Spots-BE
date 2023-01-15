@@ -51,7 +51,7 @@ exports.register = async (req, res, next) => {
     }
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     req.body.password = hashedPassword;
-    await Organizer.create(req.body);
+    const newOrganizer = await Organizer.create(req.body);
     //TODO create a good email structure and test
     email(
       req.body.email,
