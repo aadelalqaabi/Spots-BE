@@ -17,6 +17,7 @@ const {
   generateOTP,
   //getUsernames,
   getEmails,
+  appleLoginorRegister,
 } = require("./users.controllers");
 
 router.param("userId", async (req, res, next, userId) => {
