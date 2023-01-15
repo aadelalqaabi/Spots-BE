@@ -12,7 +12,6 @@ const offerRoutes = require("./api/offers/offers.routes");
 const rewardRoutes = require("./api/rewards/reward.routes");
 const ticketRoutes = require("./api/tickets/tickets.routes");
 const pointRoutes = require("./api/points/points.routes");
-const codeRoutes = require("./api/Codes/codes.routes");
 const adRoutes = require("./api/ads/ads.routes");
 const applicationRoutes = require("./api/applications/applications.routes");
 const cors = require("cors");
