@@ -46,7 +46,10 @@ exports.ticketCreate = async (req, res, next) => {
       $push: { tickets: newTicket._id },
     });
     ticket = { ...ticket, id: newTicket._id };
-    email("ticket", req.user.email, `Your Dest Ticket`, ticket);
+    if (!req.user.email.includes("@privaterelay.appleid.com")) {
+      email("ticket", req.user.email, `Your Dest Ticket`, ticket);
+    } else {
+    }
     res.status(200).json(newTicket);
   } catch (error) {
     next(error);
