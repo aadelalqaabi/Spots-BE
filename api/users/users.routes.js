@@ -15,8 +15,10 @@ const {
   changePassword,
   forgotPassword,
   generateOTP,
-  //getUsernames,
   getEmails,
+  removeToken,
+  addToken,
+  changeLocal
   appleLoginorRegister,
 } = require("./users.controllers");
 
@@ -64,7 +66,24 @@ router.put(
   removeSpot
 );
 
+router.put(
+  "/notification/add",
+  passport.authenticate("userJWT", { session: false }),
+  addToken
+);
+
+router.put(
+  "/notification/remove",
+  passport.authenticate("userJWT", { session: false }),
+  removeToken
+);
+
+router.put(
+  "/local/change",
+  passport.authenticate("userJWT", { session: false }),
+  changeLocal
+);
+
 router.get("/", getUsers);
-//router.get("/usernames", getUsernames);
 router.get("/emails", getEmails);
 module.exports = router;
