@@ -18,7 +18,7 @@ const {
   getEmails,
   removeToken,
   addToken,
-  changeLocal
+  changeLocal,
   appleLoginorRegister,
 } = require("./users.controllers");
 
