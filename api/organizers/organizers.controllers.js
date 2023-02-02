@@ -14,6 +14,7 @@ exports.login = async (req, res, next) => {
       image: organizer.image,
       phone: organizer.phone,
       bio: organizer.bio,
+      numofDests: organizer.numofDests,
       displayNameEn: organizer.displayNameEn,
       displayNameAr: organizer.displayNameAr,
       exp: Date.now() + JWT_EXPIRATION_MS,
@@ -34,6 +35,7 @@ const generateToken = (organizer) => {
     phone: organizer.phone,
     bio: organizer.bio,
     spots: organizer.spots,
+    numofDests: organizer.numofDests,
     displayNameEn: organizer.displayNameEn,
     displayNameAr: organizer.displayNameAr,
     exp: Date.now() + JWT_EXPIRATION_MS,
@@ -51,7 +53,7 @@ exports.register = async (req, res, next) => {
     }
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     req.body.password = hashedPassword;
-    await Organizer.create(req.body);
+    const newOrganizer = await Organizer.create(req.body);
     //TODO create a good email structure and test
     email(
       req.body.email,

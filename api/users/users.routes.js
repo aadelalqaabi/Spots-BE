@@ -19,6 +19,7 @@ const {
   removeToken,
   addToken,
   changeLocal
+  appleLoginorRegister,
 } = require("./users.controllers");
 
 router.param("userId", async (req, res, next, userId) => {
