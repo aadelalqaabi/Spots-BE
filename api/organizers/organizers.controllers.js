@@ -151,3 +151,17 @@ exports.forgotPassword = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.addDests = async (req, res, next) => { 
+  // TODO ==> add a page were organizers send in moreDests requests ==> in admin side create a moreDest 
+  // request page where you take in all requests from organizers and show them in list with a button that adds in the needed amount of dest
+  // This contains one problem, we need to figure out a way to recieve payments 
+  const { numofDests, oranizerUsername  } = req.body;
+  try {
+    // await Organizer.findOneAndUpdate({ username: oranizerUsername }, { numofDests: numofDests })
+    await Organizer.findByIdAndUpdate(oranizerUsername, {numofDests: numofDests});
+    res.status(200).json("Dests Added");
+  } catch (err) {
+    next(err);
+  }
+};

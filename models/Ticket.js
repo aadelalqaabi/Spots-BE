@@ -12,6 +12,10 @@ const TicketSchema = new mongoose.Schema({
     ref: "User",
   },
   isFree: Boolean,
+  date: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 module.exports = mongoose.model("Ticket", TicketSchema);

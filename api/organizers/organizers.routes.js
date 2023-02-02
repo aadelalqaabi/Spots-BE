@@ -10,7 +10,8 @@ const {
   fetchOrganizer,
   updateOrganizer,
   changePassword,
-  forgotPassword
+  forgotPassword,
+  addDests
 } = require("./organizers.controllers");
 
 router.param("organizerId", async (req, res, next, organizerId) => {
@@ -39,5 +40,8 @@ router.put(
   "/change",
   passport.authenticate("orgJWT", { session: false }),
   changePassword
+);
+router.put(
+  "/more", addDests
 );
 module.exports = router;

@@ -14,6 +14,7 @@ const ticketRoutes = require("./api/tickets/tickets.routes");
 const pointRoutes = require("./api/points/points.routes");
 const adRoutes = require("./api/ads/ads.routes");
 const applicationRoutes = require("./api/applications/applications.routes");
+const pushNotificationRoutes = require("./api/pushNotification/pushNotification.routes");
 const cors = require("cors");
 const {
   localStrategyUser,
@@ -28,7 +29,7 @@ const { JWT_SECRET } = require("./config/keys");
 const { AppleStrategy } = require("./middleware/ApplePassport");
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 //middleware
 app.use(cors());
@@ -98,6 +99,7 @@ app.use("/api/point", pointRoutes);
 applicationRoutes;
 app.use("/api/ads", adRoutes);
 app.use("/api/application", applicationRoutes);
+app.use("/api/pushNotification", pushNotificationRoutes);
 //
 app.use((req, res, next) => {
   const err = new Error("Not Found");
@@ -120,5 +122,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port, () => {
-  console.log("The application is running on localhost:3000");
+  console.log(`The application is running on localhost:${port}`);
 });

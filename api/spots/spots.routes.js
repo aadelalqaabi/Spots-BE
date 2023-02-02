@@ -28,7 +28,7 @@ router.post(
 
 router.delete("/delete/:spotId", passport.authenticate("orgJWT", { session: false }), deleteSpot);
 
-router.put("/update/:spotId/cat/:categoryId", upload.single("image"), updateSpot);
+router.put("/update/:spotId/cat/:categoryId", passport.authenticate("orgJWT", { session: false }), upload.single("image"), updateSpot);
 
 router.get("/", getSpots);
 

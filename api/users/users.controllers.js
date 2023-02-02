@@ -19,7 +19,6 @@ exports.login = async (req, res, next) => {
 const generateToken = (user) => {
   const payload = {
     id: user.id,
-    // username: user.username,
     name: user.name,
     email: user.email,
     phone: user.phone,
@@ -27,6 +26,7 @@ const generateToken = (user) => {
     spots: user.spots,
     tickets: user.tickets,
     rewards: user.rewards,
+    notificationToken: user.notificationToken
   };
   const token = jwt.sign(payload, JWT_SECRET);
   return token;
@@ -76,7 +76,6 @@ exports.fetchUser = async (userId, next) => {
 };
 
 exports.changePassword = async (req, res, next) => {
-  //const { username, newPassword, currentPassword } = req.body;
   const { email, newPassword, currentPassword } = req.body;
   const saltRounds = 10;
   try {
@@ -124,7 +123,8 @@ exports.updateUser = async (req, res, next) => {
     const user = await User.findByIdAndUpdate(req.user._id, req.body, {
       new: true,
     }).select("-password");
-    res.status(200).json(user);
+    const token = generateToken(user);
+    res.status(200).json({ token });
   } catch (err) {
     next(err);
   }
@@ -205,21 +205,48 @@ exports.generateOTP = async (req, res) => {
   }
 };
 
-{
-  /* exports.getUsernames = async (req, res) => {
-  try {
-    const usernames = await User.find().select("username");
-    res.status(201).json(usernames);
-  } catch (err) {
-    res.status(500).json("Server Error");
-  }
-}; */
-}
 exports.getEmails = async (req, res) => {
   try {
     const emails = await User.find().select("email");
     res.status(201).json(emails);
   } catch (err) {
     res.status(500).json("Server Error");
+  }
+};
+
+exports.addToken = async (req, res, next) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.user._id, req.body, {
+      new: true,
+    }).select("-password");
+    const token = generateToken(user);
+    res.status(200).json({ token });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.removeToken = async (req, res, next) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.user._id, req.body, {
+      new: true,
+    }).select("-password");
+    const token = generateToken(user);
+    res.status(200).json({ token });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.changeLocal = async (req, res, next) => {
+  console.log('hi you enterd')
+  try {
+    const user = await User.findByIdAndUpdate(req.user._id, req.body, {
+      new: true,
+    }).select("-password");
+    const token = generateToken(user);
+    res.status(200).json({ token });
+  } catch (err) {
+    next(err);
   }
 };
