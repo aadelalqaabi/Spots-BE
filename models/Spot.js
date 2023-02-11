@@ -24,6 +24,7 @@ const SpotSchema = new mongoose.Schema({
     ref: "Organizer",
   },
   isFree: { type: Boolean, default: "true" },
+  isPublished: { type: Boolean, default: "false" },
   spotDate: {
     year: Number,
     month: Number,
