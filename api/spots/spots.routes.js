@@ -11,6 +11,11 @@ const {
   spotsCreate,
 } = require("./spots.controllers");
 
+const cpUpload = upload.fields([
+  { name: "image", maxCount: 1 },
+  { name: "gallery", maxCount: 5 },
+]);
+
 router.param("spotId", async (req, res, next, spotId) => {
   const spot = await fetchSpot(spotId, next);
   if (spot) {
@@ -24,11 +29,26 @@ router.param("spotId", async (req, res, next, spotId) => {
 });
 
 router.post(
-  "/cat/:categoryId", passport.authenticate("orgJWT", { session: false }), upload.single("image"), spotsCreate); 
+  "/cat/:categoryId",
+  passport.authenticate("orgJWT", { session: false }),
+  cpUpload,
+  //upload.single("image"),
+  spotsCreate
+);
 
-router.delete("/delete/:spotId", passport.authenticate("orgJWT", { session: false }), deleteSpot);
+router.delete(
+  "/delete/:spotId",
+  passport.authenticate("orgJWT", { session: false }),
+  deleteSpot
+);
 
-router.put("/update/:spotId/cat/:categoryId", passport.authenticate("orgJWT", { session: false }), upload.single("image"), updateSpot);
+router.put(
+  "/update/:spotId/cat/:categoryId",
+  passport.authenticate("orgJWT", { session: false }),
+  cpUpload,
+  // upload.single("image"),
+  updateSpot
+);
 
 router.get("/", getSpots);
 
