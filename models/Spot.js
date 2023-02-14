@@ -4,6 +4,7 @@ const SpotSchema = new mongoose.Schema({
   name: String,
   nameAr: String,
   image: String,
+  gallery: [String],
   video: String,
   location: String,
   category: {
