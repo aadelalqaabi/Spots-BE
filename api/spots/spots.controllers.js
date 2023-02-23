@@ -1,6 +1,7 @@
 const Spot = require("../../models/Spot");
 const Organizer = require("../../models/Organizer");
 const Category = require("../../models/Category");
+const PushNotification = require("../../models/PushNotification");
 
 exports.getSpots = async (req, res, next) => {
   try {
@@ -27,6 +28,7 @@ exports.spotsCreate = async (req, res, next) => {
     await Category.findByIdAndUpdate(categoryId, {
       $push: { spots: newSpot._id },
     });
+    await newDestNotification(req.user._id)
     res.status(201).json(newSpot);
   } catch (error) {
     next(error);
@@ -129,3 +131,79 @@ daysUpdate = (oldSpot) => {
     }
   }
 };
+
+newDestNotification = async (organizerId) => {
+  const org = await Organizer.findOne({ _id: organizerId }).populate('registerdUsers');
+
+  const enNoti = {
+    title: `${org.displayNameEn === "" ? org.username : org.displayNameEn} just posted a new dest 👀`,
+    body: `Click to view more`
+  }
+
+  const arNoti = {
+    title: `👀 نشر للتو وجهة جديدة ${org.displayNameAr === "" ? org.username : org.displayNameAr}`,
+    body: `انقر لعرض المزيد`
+  }
+
+  // const newPushNotification = await PushNotification.create(req.body);
+    for(let i = 0; i < org.registerdUsers.length; i++){
+      let user = org.registerdUsers[i];
+      if(user.notificationToken !== "") {
+        if(user.locale.includes("en")) {
+          let message = {
+            to: user.notificationToken,
+            sound: 'default',
+            title: enNoti.title,
+            body: enNoti.body,
+            data: {},
+            _displayInForeground: true
+          };
+          console.log('sent en')
+          try {
+            let response = await fetch('https://exp.host/--/api/v2/push/send', {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Accept-encoding': 'gzip, deflate',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(message),
+            });
+    
+            if (!response.ok) {
+              throw new Error(`Failed to send push notification to ${user.notificationToken}. Status: ${response.status}`);
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        } else if(user.locale.includes("ar")){
+          let message = {
+            to: user.notificationToken,
+            sound: 'default',
+            title: arNoti.title,
+            body: arNoti.body,
+            data: {},
+            _displayInForeground: true
+          };
+          console.log('sent ar')
+          try {
+            let response = await fetch('https://exp.host/--/api/v2/push/send', {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Accept-encoding': 'gzip, deflate',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(message),
+            });
+    
+            if (!response.ok) {
+              throw new Error(`Failed to send push notification to ${user.notificationToken}. Status: ${response.status}`);
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      }
+    }
+}

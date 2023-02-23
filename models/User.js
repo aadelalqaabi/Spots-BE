@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Organizer = require("./Organizer");
 
 const validateEmail = (email) => {
   var re =
@@ -41,7 +42,12 @@ const UserSchema = new mongoose.Schema({
     },
   ],
   notificationToken: {type: String, default: ""},
-  locale: {type: String, default: ""}
+  locale: {type: String, default: ""},
+  organizers: [
+    {
+      type: String,
+    },
+  ],
 });
 
 module.exports = mongoose.model("User", UserSchema);

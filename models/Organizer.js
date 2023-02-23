@@ -25,11 +25,17 @@ const OrganizerSchema = new mongoose.Schema({
   phone: String,
   image: String,
   bio: String,
-  numofDests: { type: Number, default: 0 },
+  numofDests: { type: Number, default: 1 },
   spots: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Spot",
+    },
+  ],
+  registerdUsers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
   ],
 });
