@@ -11,11 +11,6 @@ const {
   spotsCreate,
 } = require("./spots.controllers");
 
-const cpUpload = upload.fields([
-  { name: "image", maxCount: 1 },
-  { name: "gallery", maxCount: 5 },
-]);
-
 router.param("spotId", async (req, res, next, spotId) => {
   const spot = await fetchSpot(spotId, next);
   if (spot) {
@@ -31,8 +26,14 @@ router.param("spotId", async (req, res, next, spotId) => {
 router.post(
   "/cat/:categoryId",
   passport.authenticate("orgJWT", { session: false }),
-  cpUpload,
-  //upload.single("image"),
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "galleryImage0", maxCount: 1 },
+    { name: "galleryImage1", maxCount: 1 },
+    { name: "galleryImage2", maxCount: 1 },
+    { name: "galleryImage3", maxCount: 1 },
+    { name: "galleryImage4", maxCount: 1 },
+  ]),
   spotsCreate
 );
 
@@ -45,8 +46,14 @@ router.delete(
 router.put(
   "/update/:spotId/cat/:categoryId",
   passport.authenticate("orgJWT", { session: false }),
-  cpUpload,
-  // upload.single("image"),
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "galleryImage0", maxCount: 1 },
+    { name: "galleryImage1", maxCount: 1 },
+    { name: "galleryImage2", maxCount: 1 },
+    { name: "galleryImage3", maxCount: 1 },
+    { name: "galleryImage4", maxCount: 1 },
+  ]),
   updateSpot
 );
 

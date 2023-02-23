@@ -15,8 +15,23 @@ exports.spotsCreate = async (req, res, next) => {
   const { categoryId } = req.params;
   req.body.organizer = req.user._id;
   req.body.category = categoryId;
-  if (req.file) {
-    req.body.image = `/uploads/${req.file.filename}`;
+  if (req.files.image && req.files.image.length > 0) {
+    req.body.image = `/uploads/${req.files.image[0].filename}`;
+  }
+  if (req.files.galleryImage0 && req.files.galleryImage0.length > 0) {
+    req.body.galleryImage0 = `/uploads/${req.files.galleryImage0[0].filename}`;
+  }
+  if (req.files.galleryImage1 && req.files.galleryImage1.length > 0) {
+    req.body.galleryImage1 = `/uploads/${req.files.galleryImage1[0].filename}`;
+  }
+  if (req.files.galleryImage2 && req.files.galleryImage2.length > 0) {
+    req.body.galleryImage2 = `/uploads/${req.files.galleryImage2[0].filename}`;
+  }
+  if (req.files.galleryImage3 && req.files.galleryImage3.length > 0) {
+    req.body.galleryImage3 = `/uploads/${req.files.galleryImage3[0].filename}`;
+  }
+  if (req.files.galleryImage4 && req.files.galleryImage4.length > 0) {
+    req.body.galleryImage4 = `/uploads/${req.files.galleryImage4[0].filename}`;
   }
   // const completeSpot = days(req.body);
   try {
@@ -37,14 +52,30 @@ exports.updateSpot = async (req, res, next) => {
   const spotId = req.params.spotId;
   const categoryId = req.params.categoryId;
   // let spot = req.body;
-
   // if(req.body.isFree === false && req.body.numOfDays === 1){
   //   const completeSpot = daysUpdate(req.body);
   // }
+
   try {
-    if (req.file) {
-      req.body.image = `/uploads/${req.file.filename}`;
+    if (req.files.image && req.files.image.length > 0) {
+      req.body.image = `/uploads/${req.files.image[0].filename}`;
     }
+    if (req.files.galleryImage0 && req.files.galleryImage0.length > 0) {
+      req.body.galleryImage0 = `/uploads/${req.files.galleryImage0[0].filename}`;
+    }
+    if (req.files.galleryImage1 && req.files.galleryImage1.length > 0) {
+      req.body.galleryImage1 = `/uploads/${req.files.galleryImage1[0].filename}`;
+    }
+    if (req.files.galleryImage2 && req.files.galleryImage2.length > 0) {
+      req.body.galleryImage2 = `/uploads/${req.files.galleryImage2[0].filename}`;
+    }
+    if (req.files.galleryImage3 && req.files.galleryImage3.length > 0) {
+      req.body.galleryImage3 = `/uploads/${req.files.galleryImage3[0].filename}`;
+    }
+    if (req.files.galleryImage4 && req.files.galleryImage4.length > 0) {
+      req.body.galleryImage4 = `/uploads/${req.files.galleryImage4[0].filename}`;
+    }
+
     if (req.body.category !== categoryId) {
       await Category.findByIdAndUpdate(req.body.category, {
         $pull: { spots: spotId },
