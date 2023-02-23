@@ -20,6 +20,8 @@ const {
   addToken,
   changeLocal,
   appleLoginorRegister,
+  registerUser,
+  unRegisterUser
 } = require("./users.controllers");
 
 router.param("userId", async (req, res, next, userId) => {
@@ -82,6 +84,17 @@ router.put(
   "/local/change",
   passport.authenticate("userJWT", { session: false }),
   changeLocal
+);
+router.put(
+  "/register/:organizerId",
+  passport.authenticate("userJWT", { session: false }),
+  registerUser
+);
+
+router.put(
+  "/un-register/:organizerId",
+  passport.authenticate("userJWT", { session: false }),
+  unRegisterUser
 );
 
 router.get("/", getUsers);

@@ -6,6 +6,7 @@ const Spot = require("../../models/Spot");
 const Reward = require("../../models/Reward");
 const { countDocuments } = require("../../models/Reward");
 const { email } = require("../../middleware/email");
+const Organizer = require("../../models/Organizer");
 
 exports.login = async (req, res, next) => {
   try {
@@ -26,7 +27,9 @@ const generateToken = (user) => {
     spots: user.spots,
     tickets: user.tickets,
     rewards: user.rewards,
-    notificationToken: user.notificationToken
+    notificationToken: user.notificationToken,
+    locale: user.locale,
+    organizers: user.organizers
   };
   const token = jwt.sign(payload, JWT_SECRET);
   return token;
@@ -143,7 +146,8 @@ exports.spotAdd = async (req, res, next) => {
         new: true,
       }
     ).select("-password");
-    res.status(200).json(user);
+    const token = generateToken(user)
+    res.status(200).json({ token });
   } catch (error) {
     next(error);
   }
@@ -239,7 +243,6 @@ exports.removeToken = async (req, res, next) => {
 };
 
 exports.changeLocal = async (req, res, next) => {
-  console.log('hi you enterd')
   try {
     const user = await User.findByIdAndUpdate(req.user._id, req.body, {
       new: true,
@@ -248,5 +251,45 @@ exports.changeLocal = async (req, res, next) => {
     res.status(200).json({ token });
   } catch (err) {
     next(err);
+  }
+};
+
+exports.registerUser = async (req, res, next) => {
+  const { organizerId } = req.params;
+  try {
+    await Organizer.findByIdAndUpdate(organizerId, {
+      $push: { registerdUsers: req.user._id },
+    });
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { $push: { organizers: organizerId } },
+      {
+        new: true,
+      }
+    ).select("-password");
+    const token = generateToken(user);
+    res.status(200).json({ token });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.unRegisterUser = async (req, res, next) => {
+  const { organizerId } = req.params;
+  try {
+    await Organizer.findByIdAndUpdate(organizerId, {
+        $pull: { registerdUsers: req.user._id },
+      });
+      const user = await User.findByIdAndUpdate(
+        req.user._id,
+        { $pull: { organizers: organizerId } },
+        {
+          new: true,
+        }
+      ).select("-password");
+      const token = generateToken(user);
+      res.status(200).json({ token });
+  } catch (error) {
+    next(error);
   }
 };
