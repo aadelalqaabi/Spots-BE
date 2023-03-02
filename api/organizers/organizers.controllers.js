@@ -1,47 +1,28 @@
 const Organizer = require("../../models/Organizer");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET, JWT_EXPIRATION_MS } = require("../../config/keys");
+const { JWT_SECRET } = require("../../config/keys");
 const { email } = require("../../middleware/email");
+const { generateTokenOrg } = require("../../middleware/generateToken");
 
 exports.login = async (req, res, next) => {
   try {
     const organizer = req.user;
-    const payload = {
-      id: organizer.id,
-      username: organizer.username,
-      email: organizer.email,
-      image: organizer.image,
-      phone: organizer.phone,
-      bio: organizer.bio,
-      numofDests: organizer.numofDests,
-      displayNameEn: organizer.displayNameEn,
-      displayNameAr: organizer.displayNameAr,
-      exp: Date.now() + JWT_EXPIRATION_MS,
-    };
-    const token = jwt.sign(payload, JWT_SECRET);
-    res.status(201).json({ token });
+    const token = generateTokenOrg(organizer);
+    res.status(200).json({ token });
   } catch (err) {
     next(err);
   }
 };
 
-const generateToken = (organizer) => {
-  const payload = {
-    id: organizer.id,
-    username: organizer.username,
-    email: organizer.email,
-    image: organizer.image,
-    phone: organizer.phone,
-    bio: organizer.bio,
-    spots: organizer.spots,
-    numofDests: organizer.numofDests,
-    displayNameEn: organizer.displayNameEn,
-    displayNameAr: organizer.displayNameAr,
-    exp: Date.now() + JWT_EXPIRATION_MS,
-  };
-  const token = jwt.sign(payload, JWT_SECRET);
-  return token;
+exports.sendOrgToken = (req, res, next) => {
+  try {
+    const organizer = req.user;
+    const token = generateTokenOrg(organizer);
+    res.status(200).json({ token });
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.register = async (req, res, next) => {
@@ -54,13 +35,14 @@ exports.register = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     req.body.password = hashedPassword;
     const newOrganizer = await Organizer.create(req.body);
-    //TODO create a good email structure and test
+    const organizerObj = req.body;
+    organizerObj.password = password;
     email(
+      "register",
       req.body.email,
       `Dest Application Accepted`,
-      `Hello ${req.body.username}, Congratulations your Dest application has been accepted, go to this link <-- Dest LINK --> and use Username: ${req.body.username}, Password: ${password} to login 👍`
+      organizerObj
     );
-    // const token = generateToken(newOrganizer);
     res.status(201).json("registered");
   } catch (err) {
     next(err);
@@ -99,7 +81,7 @@ exports.updateOrganizer = async (req, res, next) => {
         new: true,
       }
     ).select("-password");
-    const token = generateToken(organizer);
+    const token = generateTokenOrg(organizer);
     res.status(200).json({ token });
   } catch (err) {
     next(err);
@@ -107,11 +89,11 @@ exports.updateOrganizer = async (req, res, next) => {
 };
 
 exports.changePassword = async (req, res, next) => {
-  const { username, newPassword, currentPassword } = req.body;
+  const { email, newPassword, currentPassword } = req.body;
   const saltRounds = 10;
   try {
     //find user
-    const changeUser = await Organizer.findOne({ username });
+    const changeUser = await Organizer.findOne({ email });
     //Unhash Password
     const isMatch = await bcrypt.compare(currentPassword, changeUser.password);
     if (isMatch) {
@@ -130,11 +112,11 @@ exports.changePassword = async (req, res, next) => {
 };
 
 exports.forgotPassword = async (req, res, next) => {
-  const { username } = req.body;
+  const { email } = req.body;
   const saltRounds = 10;
   try {
     //find user
-    const changeUser = await User.findOne({ username });
+    const changeUser = await User.findOne({ email });
     //hash Password
     const newPassword = new Array(12)
       .fill()
@@ -144,11 +126,11 @@ exports.forgotPassword = async (req, res, next) => {
     changeUser.password = hashedPassword;
     //Update Password & generate token
     await User.findByIdAndUpdate(changeUser._id, changeUser);
-    email(
-      req.body.email,
-      `Dest Password Change`,
-      `Hello ${req.body.username}, your password has been changed, use this new Password: ${password} to login 👍`
-    );
+    // email(
+    //   req.body.email,
+    //   `Dest Password Change`,
+    //   `Hello ${req.body.username}, your password has been changed, use this new Password: ${password} to login 👍`
+    // );
     res.status(204);
   } catch (err) {
     next(err);
@@ -159,10 +141,12 @@ exports.addDests = async (req, res, next) => {
   // TODO ==> add a page were organizers send in moreDests requests ==> in admin side create a moreDest
   // request page where you take in all requests from organizers and show them in list with a button that adds in the needed amount of dest
   // This contains one problem, we need to figure out a way to recieve payments
-  const { numofDests, oranizerUsername } = req.body;
+  const { numofDests, organizerEmail } = req.body;
+  console.log("req.body", req.body);
   try {
     // await Organizer.findOneAndUpdate({ username: oranizerUsername }, { numofDests: numofDests })
-    await Organizer.findByIdAndUpdate(oranizerUsername, {
+    const organizer = await Organizer.findOne({ organizerEmail });
+    await Organizer.findByIdAndUpdate(organizer._id, {
       numofDests: numofDests,
     });
     res.status(200).json("Dests Added");

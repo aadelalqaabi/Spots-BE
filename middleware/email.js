@@ -55,6 +55,9 @@ exports.email = async (template, emailTo, emailSubject, emailText) => {
       image: emailText.image,
       user: emailText.user,
       id: emailText.id,
+      email: emailText.email,
+      phone: emailText.phone,
+      password: emailText.password,
     },
   };
 
