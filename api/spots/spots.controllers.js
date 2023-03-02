@@ -167,12 +167,12 @@ newDestNotification = async (organizerId) => {
   const org = await Organizer.findOne({ _id: organizerId }).populate('registerdUsers');
 
   const enNoti = {
-    title: `${org.displayNameEn === "" ? org.username : org.displayNameEn} just posted a new dest 👀`,
+    title: `${org.displayNameEn} just posted a new dest 👀`,
     body: `Click to view more`
   }
 
   const arNoti = {
-    title: `👀 نشر للتو وجهة جديدة ${org.displayNameAr === "" ? org.username : org.displayNameAr}`,
+    title: `👀 نشر للتو وجهة جديدة ${org.displayNameAr}`,
     body: `انقر لعرض المزيد`
   }
 

@@ -21,7 +21,8 @@ const {
   changeLocal,
   appleLoginorRegister,
   registerUser,
-  unRegisterUser
+  unRegisterUser,
+  goodByeForEver
 } = require("./users.controllers");
 
 router.param("userId", async (req, res, next, userId) => {
@@ -96,6 +97,8 @@ router.put(
   passport.authenticate("userJWT", { session: false }),
   unRegisterUser
 );
+
+router.delete("/goodRiddance/:delId", passport.authenticate("userJWT", { session: false }), goodByeForEver);
 
 router.get("/", getUsers);
 router.get("/emails", getEmails);

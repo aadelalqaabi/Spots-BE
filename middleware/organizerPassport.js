@@ -6,19 +6,10 @@ const { JWT_SECRET } = require("../config/keys");
 const { fromAuthHeaderAsBearerToken } = require("passport-jwt/lib/extract_jwt");
 
 exports.localStrategyOrg = new LocalStrategy(
-  async (username, password, done) => {
-    let organizer = {};
-    const isEmail =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi.test(
-        username
-      );
+  { usernameField: "email" },
+  async (email, password, done) => {
     try {
-      if (isEmail) {
-        const email = username;
-        organizer = await Organizer.findOne({ email });
-      } else {
-        organizer = await Organizer.findOne({ username });
-      }
+      const organizer = await Organizer.findOne({ email });
       let isMatch = true;
       if (organizer) {
         isMatch = await bcrypt.compare(password, organizer.password);
@@ -41,7 +32,6 @@ exports.jwtStrategyOrg = new JWTStrategy(
     }
     try {
       const organizer = await Organizer.findById(jwtPayload.id);
-      //const user = await User.findById(jwtPayload.id);
       done(null, organizer);
     } catch (error) {
       done(error);
