@@ -2,7 +2,7 @@ const Ticket = require("../../models/Ticket");
 const Spot = require("../../models/Spot");
 const User = require("../../models/User");
 const { email } = require("../../middleware/email");
-
+const { generateToken } = require("../../middleware/generateToken");
 exports.fetchTicket = async (ticketId, next) => {
   try {
     const ticket = await Ticket.findById(ticketId);
@@ -42,15 +42,22 @@ exports.ticketCreate = async (req, res, next) => {
     delete req.body.startDateAr;
     delete req.body.startDateEn;
     const newTicket = await Ticket.create(req.body);
-    await User.findByIdAndUpdate(req.user._id, {
-      $push: { tickets: newTicket._id },
-    });
     ticket = { ...ticket, id: newTicket._id };
     if (!req.user.email.includes("@privaterelay.appleid.com")) {
       email("ticket", req.user.email, `Your Dest Ticket`, ticket);
     } else {
     }
-    res.status(200).json(newTicket);
+    const newUser = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $push: { tickets: newTicket._id },
+      },
+      {
+        new: true,
+      }
+    ).select("-password");
+    const token = generateToken(newUser);
+    res.status(200).json({ token, newTicket });
   } catch (error) {
     next(error);
   }

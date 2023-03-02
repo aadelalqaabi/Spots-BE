@@ -17,7 +17,6 @@ exports.AppleStrategy = new AppleStrategy(
   },
   function (accessToken, refreshToken, profile, done) {
     const id = profile.id;
-    console.log(profile);
   }
 );
 

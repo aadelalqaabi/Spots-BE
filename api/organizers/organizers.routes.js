@@ -11,7 +11,8 @@ const {
   updateOrganizer,
   changePassword,
   forgotPassword,
-  addDests
+  addDests,
+  sendOrgToken,
 } = require("./organizers.controllers");
 
 router.param("organizerId", async (req, res, next, organizerId) => {
@@ -25,15 +26,15 @@ router.param("organizerId", async (req, res, next, organizerId) => {
     next(err);
   }
 });
-// , passport.authenticate("orgJWT", { session: false })
-router.post("/register", upload.single("image"), register); 
+router.post("/register", upload.single("image"), register);
 router.post("/login", passport.authenticate("org", { session: false }), login);
-router.put("/update", upload.single("image"), passport.authenticate("orgJWT", { session: false }), updateOrganizer);
-// router.put(
-//   "/:organizerId/spots/:spotId",
-//   upload.single("image"),
-//   updateOrganizer
-// );
+router.put(
+  "/update",
+  upload.single("image"),
+  passport.authenticate("orgJWT", { session: false }),
+  updateOrganizer
+);
+
 router.get("/", getOrganizers);
 router.put("/forgot", forgotPassword);
 router.put(
@@ -41,7 +42,10 @@ router.put(
   passport.authenticate("orgJWT", { session: false }),
   changePassword
 );
-router.put(
-  "/more", addDests
+router.put("/more", addDests);
+router.post(
+  "/updateToken",
+  passport.authenticate("orgJWT", { session: false }),
+  sendOrgToken
 );
 module.exports = router;
