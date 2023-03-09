@@ -15,6 +15,7 @@ const pointRoutes = require("./api/points/points.routes");
 const adRoutes = require("./api/ads/ads.routes");
 const applicationRoutes = require("./api/applications/applications.routes");
 const pushNotificationRoutes = require("./api/pushNotification/pushNotification.routes");
+const forgetOrganizersRoutes = require("./api/forgetOrganizers/forgetOrganizers.routes");
 const cors = require("cors");
 const {
   localStrategyUser,
@@ -100,6 +101,7 @@ applicationRoutes;
 app.use("/api/ads", adRoutes);
 app.use("/api/application", applicationRoutes);
 app.use("/api/pushNotification", pushNotificationRoutes);
+app.use("/api/forgetOrganizer", forgetOrganizersRoutes);
 //
 app.use((req, res, next) => {
   const err = new Error("Not Found");

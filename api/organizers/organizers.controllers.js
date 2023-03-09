@@ -33,10 +33,14 @@ exports.register = async (req, res, next) => {
       req.body.image = `/uploads/${req.file.filename}`;
     }
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    req.body.password = hashedPassword;
-    const newOrganizer = await Organizer.create(req.body);
-    const organizerObj = req.body;
-    organizerObj.password = password;
+    const organizerObj = {
+      email: req.body.email,
+      password: hashedPassword,
+      phone: req.body.phone,
+    };
+    await Organizer.create(organizerObj);
+    console.log('password', password)
+    organizerObj.password = password
     email(
       "register",
       req.body.email,
@@ -52,8 +56,16 @@ exports.register = async (req, res, next) => {
 exports.getOrganizers = async (req, res) => {
   try {
     const organizers = await Organizer.find()
-      .populate("spots")
       .select("-password");
+    res.status(201).json(organizers);
+  } catch (err) {
+    res.status(500).json("Server Error");
+  }
+};
+
+exports.getOrganizerDetails = async (req, res) => {
+  try {
+    const organizers = await Organizer.find({}, 'email phone')
     res.status(201).json(organizers);
   } catch (err) {
     res.status(500).json("Server Error");
@@ -89,11 +101,11 @@ exports.updateOrganizer = async (req, res, next) => {
 };
 
 exports.changePassword = async (req, res, next) => {
-  const { email, newPassword, currentPassword } = req.body;
+  const { id, newPassword, currentPassword } = req.body;
   const saltRounds = 10;
   try {
     //find user
-    const changeUser = await Organizer.findOne({ email });
+    const changeUser = await Organizer.findById(id);
     //Unhash Password
     const isMatch = await bcrypt.compare(currentPassword, changeUser.password);
     if (isMatch) {
@@ -112,44 +124,56 @@ exports.changePassword = async (req, res, next) => {
 };
 
 exports.forgotPassword = async (req, res, next) => {
-  const { email } = req.body;
+  const { email } = req.params
   const saltRounds = 10;
   try {
     //find user
-    const changeUser = await User.findOne({ email });
-    //hash Password
-    const newPassword = new Array(12)
-      .fill()
-      .map(() => String.fromCharCode(Math.random() * 86 + 40))
-      .join("");
-    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-    changeUser.password = hashedPassword;
-    //Update Password & generate token
-    await User.findByIdAndUpdate(changeUser._id, changeUser);
-    // email(
-    //   req.body.email,
-    //   `Dest Password Change`,
-    //   `Hello ${req.body.username}, your password has been changed, use this new Password: ${password} to login 👍`
-    // );
-    res.status(204);
+    const changeOrganizer = await Organizer.findOne({ email });
+    if(changeOrganizer && changeOrganizer.email === email){
+      //hash Password
+      const newPassword = new Array(12)
+        .fill()
+        .map(() => String.fromCharCode(Math.random() * 86 + 40))
+        .join("");
+        console.log('newPassword', newPassword)
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+      changeOrganizer.password = hashedPassword;
+      const updatedOrg = await Organizer.findByIdAndUpdate(changeOrganizer._id, changeOrganizer);
+      const organizerObj = {
+          email: updatedOrg.email,
+          password: newPassword,
+          phone: updatedOrg.phone,
+        };
+        email(
+            "Forget",
+            organizerObj.email,
+            `Dest Forget Password`,
+            organizerObj
+          );
+      res.status(200).json({ message: "Password Generated" });
+      return;
+    }
+    res.status(200).json({ message: "No Organizer Found" });
+    return;
   } catch (err) {
     next(err);
   }
 };
 
 exports.addDests = async (req, res, next) => {
-  // TODO ==> add a page were organizers send in moreDests requests ==> in admin side create a moreDest
-  // request page where you take in all requests from organizers and show them in list with a button that adds in the needed amount of dest
-  // This contains one problem, we need to figure out a way to recieve payments
   const { numofDests, organizerEmail } = req.body;
-  console.log("req.body", req.body);
   try {
-    // await Organizer.findOneAndUpdate({ username: oranizerUsername }, { numofDests: numofDests })
-    const organizer = await Organizer.findOne({ organizerEmail });
-    await Organizer.findByIdAndUpdate(organizer._id, {
-      numofDests: numofDests,
-    });
-    res.status(200).json("Dests Added");
+    const organizer = await Organizer.findOne({ email: organizerEmail });
+    if(organizer  && organizer.email === organizerEmail && req.user.email === "dest.kuwait@gmail.com"){
+      const numb = organizer.numofDests + parseInt(numofDests);
+      await Organizer.findByIdAndUpdate(organizer._id, {
+        numofDests: numb,
+      });
+      res.status(200).json({ message: "Dests Added"});
+      return;
+    }
+    res.status(200).json({ message: `No Account Associated to ${organizerEmail}`});
+      return;
   } catch (err) {
     next(err);
   }

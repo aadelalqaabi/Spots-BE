@@ -60,11 +60,12 @@ exports.fetchUser = async (userId, next) => {
 };
 
 exports.changePassword = async (req, res, next) => {
-  const { email, newPassword, currentPassword } = req.body;
+  const { id, newPassword, currentPassword } = req.body;
   const saltRounds = 10;
   try {
+    console.log('in')
     //find user
-    const changeUser = await User.findOne({ email });
+    const changeUser = await User.findById(id);
     //Unhash Password
     const isMatch = await bcrypt.compare(currentPassword, changeUser.password);
     if (isMatch) {
@@ -88,12 +89,15 @@ exports.forgotPassword = async (req, res, next) => {
   try {
     //find user
     const changeUser = await User.findOne({ email });
-    //hash Password
-    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-    changeUser.password = hashedPassword;
-    //Update Password & generate token
-    await User.findByIdAndUpdate(changeUser._id, changeUser);
-    res.status(204);
+    if(changeUser && changeUser.email === email){
+      //hash Password
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+      changeUser.password = hashedPassword;
+      //Update Password & generate token
+      await User.findByIdAndUpdate(changeUser._id, changeUser);
+      res.status(200).json({ message: "Password Generated" });
+    }
+    res.status(200).json({ message: "No User Found" });
   } catch (err) {
     next(err);
   }
@@ -179,14 +183,22 @@ exports.removeSpot = async (req, res, next) => {
 };
 
 exports.generateOTP = async (req, res) => {
+  const { email } = req.params;
   try {
     const minmum = 100000;
     const maxmum = 999999;
     const OTP = Math.floor(Math.random() * (maxmum - minmum + 1)) + minmum;
-    res.status(200).json(OTP);
-    email("OTP", "adelalqaapi@gmail.com", `Your Dest OTP`, `${OTP}`);
+    const user = await User.findOne({ email });
+    if(user && user.email === email) {
+      // email("OTP", user.email, `Your Dest OTP`, `${OTP}`);
+      res.status(200).json({ message: "User Found",  OTP: OTP});
+      return;
+    } 
+    res.status(200).json({ message: "No User Found" });
+    return;
   } catch (err) {
     res.status(500).json("Server Error");
+    return;
   }
 };
 

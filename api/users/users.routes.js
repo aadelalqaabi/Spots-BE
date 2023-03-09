@@ -51,7 +51,7 @@ router.put(
   changePassword
 );
 router.put("/forgot", forgotPassword);
-router.post("/OTP", generateOTP);
+router.post("/OTP/:email", generateOTP);
 router.put(
   "/spots/:spotId",
   passport.authenticate("userJWT", { session: false }),

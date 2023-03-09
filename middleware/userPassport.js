@@ -8,7 +8,6 @@ const { fromAuthHeaderAsBearerToken } = require("passport-jwt/lib/extract_jwt");
 
 exports.localStrategyUser = new LocalStrategy(
   { usernameField: "email" },
-  // async (phone, password, done) => {
   async (email, password, done) => {
     try {
       const user = await User.findOne({ email });
