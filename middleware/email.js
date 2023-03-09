@@ -58,6 +58,8 @@ exports.email = async (template, emailTo, emailSubject, emailText) => {
       email: emailText.email,
       phone: emailText.phone,
       password: emailText.password,
+      displayNameEn: emailText.displayNameEn,
+      fPasswords: emailText.password,
     },
   };
 
