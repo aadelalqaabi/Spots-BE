@@ -13,6 +13,7 @@ const {
   forgotPassword,
   addDests,
   sendOrgToken,
+  getOrganizerDetails
 } = require("./organizers.controllers");
 
 router.param("organizerId", async (req, res, next, organizerId) => {
@@ -36,13 +37,14 @@ router.put(
 );
 
 router.get("/", getOrganizers);
-router.put("/forgot", forgotPassword);
+router.get("/Details", getOrganizerDetails);
+router.put("/forgot/:email", forgotPassword);
 router.put(
   "/change",
   passport.authenticate("orgJWT", { session: false }),
   changePassword
 );
-router.put("/more", addDests);
+router.put("/more", passport.authenticate("orgJWT", { session: false }), addDests);
 router.post(
   "/updateToken",
   passport.authenticate("orgJWT", { session: false }),

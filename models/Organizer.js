@@ -7,8 +7,6 @@ const validateEmail = (email) => {
 };
 
 const OrganizerSchema = new mongoose.Schema({
-  displayNameEn: String,
-  displayNameAr: String,
   email: {
     type: String,
     required: true,
@@ -20,6 +18,8 @@ const OrganizerSchema = new mongoose.Schema({
     ],
     unique: true,
   },
+  displayNameEn: String,
+  displayNameAr: String,
   password: String,
   phone: String,
   image: String,
