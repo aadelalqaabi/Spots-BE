@@ -10,6 +10,7 @@ exports.login = async (req, res, next) => {
     const organizer = req.user;
     const token = generateTokenOrg(organizer);
     res.status(200).json({ token });
+    return;
   } catch (err) {
     next(err);
   }
@@ -20,6 +21,7 @@ exports.sendOrgToken = (req, res, next) => {
     const organizer = req.user;
     const token = generateTokenOrg(organizer);
     res.status(200).json({ token });
+    return;
   } catch (err) {
     next(err);
   }
@@ -38,16 +40,12 @@ exports.register = async (req, res, next) => {
       password: hashedPassword,
       phone: req.body.phone,
     };
+    const orgtoEmail = organizerObj;
     await Organizer.create(organizerObj);
-    console.log('password', password)
-    organizerObj.password = password
-    email(
-      "register",
-      req.body.email,
-      `Dest Application Accepted`,
-      organizerObj
-    );
+    orgtoEmail.password = password;
+    email("register", req.body.email, `Dest Application Accepted`, orgtoEmail);
     res.status(201).json("registered");
+    return;
   } catch (err) {
     next(err);
   }
@@ -55,20 +53,23 @@ exports.register = async (req, res, next) => {
 
 exports.getOrganizers = async (req, res) => {
   try {
-    const organizers = await Organizer.find()
-      .select("-password");
+    const organizers = await Organizer.find().select("-password");
     res.status(201).json(organizers);
+    return;
   } catch (err) {
     res.status(500).json("Server Error");
+    return;
   }
 };
 
 exports.getOrganizerDetails = async (req, res) => {
   try {
-    const organizers = await Organizer.find({}, 'email phone')
+    const organizers = await Organizer.find({}, "email phone");
     res.status(201).json(organizers);
+    return;
   } catch (err) {
     res.status(500).json("Server Error");
+    return;
   }
 };
 
@@ -95,6 +96,7 @@ exports.updateOrganizer = async (req, res, next) => {
     ).select("-password");
     const token = generateTokenOrg(organizer);
     res.status(200).json({ token });
+    return;
   } catch (err) {
     next(err);
   }
@@ -115,8 +117,10 @@ exports.changePassword = async (req, res, next) => {
       //Update Password & generate token
       await Organizer.findByIdAndUpdate(changeUser._id, changeUser);
       res.status(200).json({ isChanged: true });
+      return;
     } else {
       res.status(200).json({ isChanged: false });
+      return;
     }
   } catch (err) {
     next(err);
@@ -124,32 +128,30 @@ exports.changePassword = async (req, res, next) => {
 };
 
 exports.forgotPassword = async (req, res, next) => {
-  const { email } = req.params
+  const { email } = req.params;
   const saltRounds = 10;
   try {
     //find user
     const changeOrganizer = await Organizer.findOne({ email });
-    if(changeOrganizer && changeOrganizer.email === email){
+    if (changeOrganizer && changeOrganizer.email === email) {
       //hash Password
       const newPassword = new Array(12)
         .fill()
         .map(() => String.fromCharCode(Math.random() * 86 + 40))
         .join("");
-        console.log('newPassword', newPassword)
+      console.log("newPassword", newPassword);
       const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
       changeOrganizer.password = hashedPassword;
-      const updatedOrg = await Organizer.findByIdAndUpdate(changeOrganizer._id, changeOrganizer);
+      const updatedOrg = await Organizer.findByIdAndUpdate(
+        changeOrganizer._id,
+        changeOrganizer
+      );
       const organizerObj = {
-          email: updatedOrg.email,
-          password: newPassword,
-          phone: updatedOrg.phone,
-        };
-        email(
-            "Forget",
-            organizerObj.email,
-            `Dest Forget Password`,
-            organizerObj
-          );
+        email: updatedOrg.email,
+        password: newPassword,
+        phone: updatedOrg.phone,
+      };
+      email("Forget", organizerObj.email, `Dest Forget Password`, organizerObj);
       res.status(200).json({ message: "Password Generated" });
       return;
     }
@@ -164,16 +166,22 @@ exports.addDests = async (req, res, next) => {
   const { numofDests, organizerEmail } = req.body;
   try {
     const organizer = await Organizer.findOne({ email: organizerEmail });
-    if(organizer  && organizer.email === organizerEmail && req.user.email === "dest.kuwait@gmail.com"){
+    if (
+      organizer &&
+      organizer.email === organizerEmail &&
+      req.user.email === "dest.kuwait@gmail.com"
+    ) {
       const numb = organizer.numofDests + parseInt(numofDests);
       await Organizer.findByIdAndUpdate(organizer._id, {
         numofDests: numb,
       });
-      res.status(200).json({ message: "Dests Added"});
+      res.status(200).json({ message: "Dests Added" });
       return;
     }
-    res.status(200).json({ message: `No Account Associated to ${organizerEmail}`});
-      return;
+    res
+      .status(200)
+      .json({ message: `No Account Associated to ${organizerEmail}` });
+    return;
   } catch (err) {
     next(err);
   }

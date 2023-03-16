@@ -51,7 +51,9 @@ exports.email = async (template, emailTo, emailSubject, emailText) => {
       amount: emailText.amount,
       details: emailText.details,
       date: emailText.startDate,
+      endDate: emailText.endDate,
       time: emailText.startTime,
+      endTime: emailText.endTime,
       image: emailText.image,
       user: emailText.user,
       id: emailText.id,
@@ -60,6 +62,7 @@ exports.email = async (template, emailTo, emailSubject, emailText) => {
       password: emailText.password,
       displayNameEn: emailText.displayNameEn,
       fPasswords: emailText.password,
+      isFree: emailText.isFree,
     },
   };
 
