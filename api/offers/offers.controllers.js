@@ -22,6 +22,7 @@ exports.offerCreate = async (req, res, next) => {
       $push: { offers: newOffer._id },
     });
     res.status(201).json(newOffer);
+    return;
   } catch (error) {
     next(error);
   }
@@ -35,6 +36,7 @@ exports.deleteOffer = async (req, res, next) => {
       $pull: { offers: offerId },
     });
     res.status(204).end();
+    return;
   } catch (err) {
     next(err);
   }
@@ -44,6 +46,7 @@ exports.getOffers = async (req, res, next) => {
   try {
     const offers = await Offer.find();
     res.json(offers);
+    return;
   } catch (error) {
     next(error);
   }

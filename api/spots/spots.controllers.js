@@ -7,6 +7,7 @@ exports.getSpots = async (req, res, next) => {
   try {
     const spots = await Spot.find().populate("users");
     res.status(201).json(spots);
+    return;
   } catch (err) {
     next(err);
   }
@@ -45,6 +46,7 @@ exports.spotsCreate = async (req, res, next) => {
     });
     await newDestNotification(req.user._id)
     res.status(201).json(newSpot);
+    return;
   } catch (error) {
     next(error);
   }
@@ -91,6 +93,7 @@ exports.updateSpot = async (req, res, next) => {
       new: true,
     });
     res.status(200).json(spot);
+    return;
   } catch (err) {
     next(err);
   }
@@ -104,6 +107,7 @@ exports.deleteSpot = async (req, res, next) => {
       $pull: { spots: spotId },
     });
     res.status(204).end();
+    return;
     // res.status(200).json(organizer);
   } catch (err) {
     next(err);

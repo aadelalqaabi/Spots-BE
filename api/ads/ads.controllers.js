@@ -15,6 +15,7 @@ exports.adCreate = async (req, res, next) => {
   try {
     const newAd = await Ad.create({ spot: spotId });
     res.status(201).json(newAd);
+    return;
   } catch (error) {
     next(error);
   }
@@ -25,6 +26,7 @@ exports.adRemove = async (req, res, next) => {
   try {
     await Ad.remove({ spot: spotId });
     res.status(201).end();
+    return;
   } catch (error) {
     next(error);
   }
@@ -34,6 +36,7 @@ exports.getAds = async (req, res, next) => {
   try {
     const ads = await Ad.find().populate("spot");
     res.json(ads);
+    return;
   } catch (error) {
     next(error);
   }

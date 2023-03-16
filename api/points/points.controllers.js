@@ -18,6 +18,7 @@ exports.pointCreate = async (req, res, next) => {
   try {
     const newPoint = await Point.create(req.body);
     res.status(200).json(newPoint);
+    return;
   } catch (error) {
     next(error);
   }
@@ -30,6 +31,7 @@ exports.updatePoint = async (req, res, next) => {
       new: true,
     });
     res.status(200).json(point);
+    return;
   } catch (err) {
     next(err);
   }
@@ -39,6 +41,7 @@ exports.getPoints = async (req, res, next) => {
   try {
     const points = await Point.find();
     res.json(points);
+    return;
   } catch (error) {
     next(error);
   }

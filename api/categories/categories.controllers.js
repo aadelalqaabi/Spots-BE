@@ -17,6 +17,7 @@ exports.categoryCreate = async (req, res, next) => {
   try {
     const newCategory = await Category.create(req.body);
     res.status(201).json(newCategory);
+    return;
   } catch (error) {
     next(error);
   }
@@ -26,6 +27,7 @@ exports.getCategories = async (req, res, next) => {
   try {
     const categories = await Category.find().populate("spots");
     res.json(categories);
+    return;
   } catch (error) {
     next(error);
   }

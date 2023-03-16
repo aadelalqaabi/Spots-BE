@@ -53,6 +53,7 @@ exports.pushNotificationCreate = async (req, res, next) => {
       }
     }
     res.status(200).json(newPushNotification);
+    return;
   } catch (error) {
     next(error);
   }
@@ -62,6 +63,7 @@ exports.getPushNotifications = async (req, res, next) => {
   try {
     const pushNotifications = await PushNotification.find();
     res.json(pushNotifications);
+    return;
   } catch (error) {
     next(error);
   }
@@ -72,6 +74,7 @@ exports.deletePushNotification = async (req, res, next) => {
   try {
     await PushNotification.findByIdAndRemove({ _id: pushNotificationId });
     res.status(204).end();
+    return;
   } catch (err) {
     next(err);
   }

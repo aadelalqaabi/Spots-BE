@@ -22,6 +22,7 @@ exports.rewardCreate = async (req, res, next) => {
       $push: { rewards: newReward._id },
     });
     res.status(201).json(newReward);
+    return;
   } catch (error) {
     next(error);
   }
@@ -35,6 +36,7 @@ exports.deleteReward = async (req, res, next) => {
       $pull: { rewards: rewardId },
     });
     res.status(204).end();
+    return;
   } catch (err) {
     next(err);
   }
@@ -48,6 +50,7 @@ exports.userAdd = async (req, res, next) => {
     });
 
     res.status(200).json(reward);
+    return;
   } catch (error) {
     next(error);
   }
@@ -57,6 +60,7 @@ exports.getRewards = async (req, res, next) => {
   try {
     const rewards = await Reward.find();
     res.json(rewards);
+    return;
   } catch (error) {
     next(error);
   }

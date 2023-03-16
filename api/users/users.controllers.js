@@ -12,6 +12,7 @@ exports.login = async (req, res, next) => {
     const { user } = req;
     const token = generateTokenUser(user);
     res.status(200).json({ token });
+    return;
   } catch (err) {
     next(err);
   }
@@ -36,6 +37,7 @@ exports.register = async (req, res, next) => {
     const newUser = await User.create(newObject);
     const token = generateTokenUser(newUser);
     res.status(201).json({ token });
+    return;
   } catch (err) {
     next(err);
   }
@@ -45,8 +47,10 @@ exports.getUsers = async (req, res) => {
   try {
     const users = await User.find().populate("spots").select("-password");
     res.status(201).json(users);
+    return;
   } catch (err) {
     res.status(500).json("Server Error");
+    return;
   }
 };
 
@@ -63,20 +67,22 @@ exports.changePassword = async (req, res, next) => {
   const { id, newPassword, currentPassword } = req.body;
   const saltRounds = 10;
   try {
-    console.log('in')
     //find user
     const changeUser = await User.findById(id);
     //Unhash Password
     const isMatch = await bcrypt.compare(currentPassword, changeUser.password);
     if (isMatch) {
       //hash Password
+      console.log('inside')
       const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
       changeUser.password = hashedPassword;
       //Update Password & generate token
       await User.findByIdAndUpdate(changeUser._id, changeUser);
       res.status(200).json({ isChanged: true });
+      return;
     } else {
       res.status(200).json({ isChanged: false });
+      return;
     }
   } catch (err) {
     next(err);
@@ -95,9 +101,11 @@ exports.forgotPassword = async (req, res, next) => {
       changeUser.password = hashedPassword;
       //Update Password & generate token
       await User.findByIdAndUpdate(changeUser._id, changeUser);
-      res.status(200).json({ message: "Password Generated" });
+      res.status(200).json({ isChanged: true });
+      return;
     }
-    res.status(200).json({ message: "No User Found" });
+    res.status(200).json({ isChanged: false });
+    return;
   } catch (err) {
     next(err);
   }
@@ -113,6 +121,7 @@ exports.updateUser = async (req, res, next) => {
     }).select("-password");
     const token = generateTokenUser(user);
     res.status(200).json({ token });
+    return;
   } catch (err) {
     next(err);
   }
@@ -133,6 +142,7 @@ exports.spotAdd = async (req, res, next) => {
     ).select("-password");
     const token = generateTokenUser(user);
     res.status(200).json({ token });
+    return;
   } catch (error) {
     next(error);
   }
@@ -152,6 +162,7 @@ exports.rewardAdd = async (req, res, next) => {
       }
     ).select("-password");
     res.status(200).json(user);
+    return;
   } catch (error) {
     next(error);
   }
@@ -177,6 +188,7 @@ exports.removeSpot = async (req, res, next) => {
       }
     ).select("-password");
     res.status(200).json(user);
+    return;
   } catch (error) {
     next(error);
   }
@@ -206,8 +218,10 @@ exports.getEmails = async (req, res) => {
   try {
     const emails = await User.find().select("email");
     res.status(201).json(emails);
+    return;
   } catch (err) {
     res.status(500).json("Server Error");
+    return;
   }
 };
 
@@ -218,6 +232,7 @@ exports.addToken = async (req, res, next) => {
     }).select("-password");
     const token = generateTokenUser(user);
     res.status(200).json({ token });
+    return;
   } catch (err) {
     next(err);
   }
@@ -230,6 +245,7 @@ exports.removeToken = async (req, res, next) => {
     }).select("-password");
     const token = generateTokenUser(user);
     res.status(200).json({ token });
+    return;
   } catch (err) {
     next(err);
   }
@@ -242,6 +258,7 @@ exports.changeLocal = async (req, res, next) => {
     }).select("-password");
     const token = generateTokenUser(user);
     res.status(200).json({ token });
+    return;
   } catch (err) {
     next(err);
   }
@@ -262,6 +279,7 @@ exports.registerUser = async (req, res, next) => {
     ).select("-password");
     const token = generateTokenUser(user);
     res.status(200).json({ token });
+    return;
   } catch (error) {
     next(error);
   }
@@ -282,6 +300,7 @@ exports.unRegisterUser = async (req, res, next) => {
     ).select("-password");
     const token = generateTokenUser(user);
     res.status(200).json({ token });
+    return;
   } catch (error) {
     next(error);
   }
@@ -292,6 +311,7 @@ exports.goodByeForEver = async (req, res, next) => {
   try {
     await User.findByIdAndDelete(delId);
     res.status(200).json("deleted");
+    return;
   } catch (error) {
     next(err);
   }

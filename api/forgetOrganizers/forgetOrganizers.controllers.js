@@ -22,8 +22,10 @@ exports.forgetOrganizerCreate = async (req, res, next) => {
       }
       const newForgetOrganizer = await ForgetOrganizer.create(org);
       res.status(201).json(newForgetOrganizer);
+      return;
     }
     res.status(200).json("no Organizer Found");
+    return;
   } catch (error) {
     next(error);
   }
@@ -33,6 +35,7 @@ exports.forgetOrganizerRemove = async (req, res, next) => {
   try {
     await ForgetOrganizer.findByIdAndRemove({ _id: forgetOrganizersId });
     res.status(204).end();
+    return;
   } catch (error) {
     next(error);
   }
@@ -42,6 +45,7 @@ exports.getForgetOrganizers = async (req, res, next) => {
   try {
     const forgetOrganizers = await ForgetOrganizer.find();
     res.json(forgetOrganizers);
+    return;
   } catch (error) {
     next(error);
   }

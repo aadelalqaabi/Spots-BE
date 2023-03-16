@@ -20,6 +20,7 @@ exports.reviewCreate = async (req, res, next) => {
       $push: { reviews: newReview._id },
     });
     res.status(201).json(newReview);
+    return;
   } catch (error) {
     next(error);
   }
@@ -29,6 +30,7 @@ exports.getReviews = async (req, res, next) => {
   try {
     const reviews = await Review.find().populate("user");
     res.json(reviews);
+    return;
   } catch (error) {
     next(error);
   }
