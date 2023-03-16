@@ -183,6 +183,7 @@
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-left: 20px; padding-right: 20px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="33.333333333333336%">
 <table border="0" cellpadding="0" cellspacing="0" class="text_block block-2" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;" width="100%">
+{{#unless isFree}}
 <tr>
 <td class="pad" style="padding-bottom:10px;padding-left:10px;padding-right:10px;padding-top:15px;">
 <div style="font-family: sans-serif">
@@ -192,13 +193,14 @@
 </div>
 </td>
 </tr>
+{{/unless}}
 </table>
 <table border="0" cellpadding="10" cellspacing="0" class="text_block block-3" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;" width="100%">
 <tr>
 <td class="pad">
 <div style="font-family: sans-serif">
 <div class="" style="font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 12px; mso-line-height-alt: 18px; color: #555555; line-height: 1.5;">
-<p style="margin: 0; font-size: 14px; mso-line-height-alt: 27px;"><span style="font-size:16px;color:#999999;">Date</span><br/> <span style="font-size:18px;color:#1b1b1b;"><strong>{{date}}</strong></span></p>
+<p style="margin: 0; font-size: 14px; mso-line-height-alt: 27px;"><span style="font-size:16px;color:#999999;">Date</span><br/> <span style="font-size:18px;color:#1b1b1b;"><strong>{{#if endDate}}{{date}} - {{endDate}}{{else}}{{date}}{{/if}}</strong></span></p>
 </div>
 </div>
 </td>
@@ -209,7 +211,7 @@
 <td class="pad" style="padding-bottom:15px;padding-left:10px;padding-right:10px;padding-top:10px;">
 <div style="font-family: sans-serif">
 <div class="" style="font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 12px; mso-line-height-alt: 18px; color: #555555; line-height: 1.5;">
-<p style="margin: 0; font-size: 14px; mso-line-height-alt: 27px;"><span style="font-size:16px;color:#999999;">Time</span><br/> <span style="font-size:18px;color:#1b1b1b;"><strong>{{time}}</strong></span></p>
+<p style="margin: 0; font-size: 14px; mso-line-height-alt: 27px;"><span style="font-size:16px;color:#999999;">Time</span><br/> <span style="font-size:18px;color:#1b1b1b;"><strong>{{#if endTime}}{{time}} - {{endTime}}{{else}}{{time}}{{/if}}</strong></span></p>
 </div>
 </div>
 </td>

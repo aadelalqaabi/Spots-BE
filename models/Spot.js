@@ -38,6 +38,7 @@ const SpotSchema = new mongoose.Schema({
   },
   startDate: { type: Date, default: Date.now() },
   endDate: Date,
+  isMultiple: { type: Boolean, default: "false" },
   seats: Number,
   seatsRemaining: Number,
   addSeats: { type: Number, default: 1 },
@@ -45,6 +46,10 @@ const SpotSchema = new mongoose.Schema({
   days: [],
   price: Number,
   spotRevenue: Number,
+  termsAndConditionsRewardsEn: String,
+  termsAndConditionsRewardsAr: String,
+  termsAndConditionsOffersEn: String,
+  termsAndConditionsOfferssAr: String,
   reviews: [
     {
       type: mongoose.Schema.Types.ObjectId,
