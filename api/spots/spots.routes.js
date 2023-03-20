@@ -33,6 +33,11 @@ router.post(
     { name: "galleryImage2", maxCount: 1 },
     { name: "galleryImage3", maxCount: 1 },
     { name: "galleryImage4", maxCount: 1 },
+    { name: "adImage0", maxCount: 1 },
+    { name: "adImage1", maxCount: 1 },
+    { name: "adImage2", maxCount: 1 },
+    { name: "adImage3", maxCount: 1 },
+    { name: "adImage4", maxCount: 1 },
   ]),
   spotsCreate
 );
@@ -53,6 +58,11 @@ router.put(
     { name: "galleryImage2", maxCount: 1 },
     { name: "galleryImage3", maxCount: 1 },
     { name: "galleryImage4", maxCount: 1 },
+    { name: "adImage0", maxCount: 1 },
+    { name: "adImage1", maxCount: 1 },
+    { name: "adImage2", maxCount: 1 },
+    { name: "adImage3", maxCount: 1 },
+    { name: "adImage4", maxCount: 1 },
   ]),
   updateSpot
 );
