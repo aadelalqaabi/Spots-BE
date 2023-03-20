@@ -34,6 +34,7 @@ exports.register = async (req, res, next) => {
     if (req.file) {
       req.body.image = `/uploads/${req.file.filename}`;
     }
+    console.log('password', password)
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const organizerObj = {
       email: req.body.email,
@@ -128,18 +129,17 @@ exports.changePassword = async (req, res, next) => {
 };
 
 exports.forgotPassword = async (req, res, next) => {
-  const { email } = req.params;
+  const orgEmail = req.params.email;
   const saltRounds = 10;
   try {
     //find user
-    const changeOrganizer = await Organizer.findOne({ email });
-    if (changeOrganizer && changeOrganizer.email === email) {
+    const changeOrganizer = await Organizer.findOne({ email: orgEmail });
+    if (changeOrganizer && changeOrganizer.email === orgEmail) {
       //hash Password
       const newPassword = new Array(12)
         .fill()
         .map(() => String.fromCharCode(Math.random() * 86 + 40))
         .join("");
-      console.log("newPassword", newPassword);
       const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
       changeOrganizer.password = hashedPassword;
       const updatedOrg = await Organizer.findByIdAndUpdate(
@@ -151,7 +151,7 @@ exports.forgotPassword = async (req, res, next) => {
         password: newPassword,
         phone: updatedOrg.phone,
       };
-      email("Forget", organizerObj.email, `Dest Forget Password`, organizerObj);
+      email("Forgot", organizerObj.email, `Dest Forget Password`, organizerObj);
       res.status(200).json({ message: "Password Generated" });
       return;
     }
