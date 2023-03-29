@@ -4,7 +4,6 @@ const Spot = require("../../models/Spot");
 const Reward = require("../../models/Reward");
 const Organizer = require("../../models/Organizer");
 const { generateTokenUser } = require("../../middleware/generateToken");
-const sharp = require("sharp");
 
 exports.login = async (req, res, next) => {
   try {
@@ -22,12 +21,6 @@ exports.register = async (req, res, next) => {
   const saltRounds = 10;
   try {
     if (req.file) {
-      const compressedImage = await sharp(req.file.path)
-        .resize(500, 500)
-        .jpeg({ quality: 70 })
-        .toBuffer();
-      fs.writeFileSync(req.file.path, compressedImage);
-
       req.body.image = `/uploads/${req.file.filename}`;
     }
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -119,11 +112,6 @@ exports.forgotPassword = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
   try {
     if (req.file) {
-      const compressedImage = await sharp(req.file.path)
-        .resize(500, 500)
-        .jpeg({ quality: 70 })
-        .toBuffer();
-      fs.writeFileSync(req.file.path, compressedImage);
       req.body.image = `/uploads/${req.file.filename}`;
     }
     const user = await User.findByIdAndUpdate(req.user._id, req.body, {
