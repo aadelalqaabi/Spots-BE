@@ -1,10 +1,15 @@
 {
   "applinks": {
-      "apps": [],
-      "details": [{
-          "appID": "LJ5LWR5ZLJ.com.dest.kuwait", 
-          "paths": ["/Login/*"]
-          }
-      ]
-  }
+      "details": [
+           {
+             "appIDs": [ "LJ5LWR5ZLJ.com.dest.kuwait" ],
+             "components": [           
+               {
+                  "/": "/SpotDetails/*",
+                  "comment": "Matches any URL with a path that starts with /SpotDetails/."
+               }
+             ]
+           }
+       ]
+   }
 }
