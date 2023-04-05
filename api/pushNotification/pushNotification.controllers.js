@@ -17,6 +17,7 @@ exports.fetchpushNotification = async (pushNotificationId, next) => {
 
 exports.pushNotificationCreate = async (req, res, next) => {
   try {
+    const spot = req.body.spot;
     const newPushNotification = await PushNotification.create(req.body);
     const users = await User.find();
     const filteredUsers = users.filter(
@@ -36,7 +37,9 @@ exports.pushNotificationCreate = async (req, res, next) => {
             sound: "default",
             title: newPushNotification.title,
             body: newPushNotification.body,
-            data: {},
+            data: {
+              link: `dest://SpotDetails/${spot}`,
+            },
             _displayInForeground: true,
           };
           try {
