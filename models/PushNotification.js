@@ -5,7 +5,7 @@ const PushNotificationSchema = new mongoose.Schema({
   body: { type: String, required: true },
   date: { type: Date, default: Date.now },
   locale: { type: String, required: true },
-  spot: { type: String, default: "", required: true },
+  spot: { type: String, default: "", required: false },
 });
 
 module.exports = mongoose.model("PushNotification", PushNotificationSchema);
