@@ -20,6 +20,13 @@ exports.register = async (req, res, next) => {
   const { password } = req.body;
   const saltRounds = 10;
   try {
+    let userName = req.body.name;
+    if (req.body.name === "null") {
+      const usersLength = (await User.find()).length + 1;
+      userName = `Dester${
+        typeof usersLength === "undefined" ? 0 : usersLength
+      }`;
+    }
     if (req.file) {
       req.body.image = `/uploads/${req.file.filename}`;
     }
@@ -30,7 +37,7 @@ exports.register = async (req, res, next) => {
       password: req.body.password,
       phone: req.body.phone,
       image: req.body.image,
-      name: req.body.name,
+      name: userName,
     };
     const newUser = await User.create(newObject);
     const token = generateTokenUser(newUser);
