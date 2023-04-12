@@ -2,7 +2,7 @@ const Ticket = require("../../models/Ticket");
 const Spot = require("../../models/Spot");
 const User = require("../../models/User");
 const { email } = require("../../middleware/email");
-const { generateToken } = require("../../middleware/generateToken");
+const { generateTokenUser } = require("../../middleware/generateToken");
 exports.fetchTicket = async (ticketId, next) => {
   try {
     const ticket = await Ticket.findById(ticketId);
@@ -129,10 +129,11 @@ exports.ticketCreate = async (req, res, next) => {
         new: true,
       }
     ).select("-password");
-    const token = generateToken(newUser);
+    const token = generateTokenUser(newUser);
     res.status(200).json({ token, newTicket });
     return;
   } catch (error) {
+    console.log('error', error)
     next(error);
   }
 };

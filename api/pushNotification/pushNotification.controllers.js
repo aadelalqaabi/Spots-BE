@@ -21,45 +21,45 @@ exports.pushNotificationCreate = async (req, res, next) => {
     const newPushNotification = await PushNotification.create(req.body);
     const users = await User.find();
     const filteredUsers = users.filter(
-      (user) => user.notificationToken !== "" || user.notificationToken !== null
-    );
+      (user) => user?.notificationToken && user.notificationToken !== "" && user?.locale && user.locale !== "");
+      console.log('filteredUsers', filteredUsers.length)
     let notificationsTokens = [];
-
     for (let i = 0; i <= filteredUsers.length; i++) {
       let user = filteredUsers[i];
-      if (
-        !notificationsTokens.some((token) => token === user.notificationToken)
-      ) {
-        notificationsTokens.push(user.notificationToken);
-        if (user.locale.includes(newPushNotification.locale)) {
-          let message = {
-            to: user.notificationToken,
-            sound: "default",
-            title: newPushNotification.title,
-            body: newPushNotification.body,
-            data: {
-              link: `dest://SpotDetails/${spot}`,
-            },
-            _displayInForeground: true,
-          };
-          try {
-            let response = await fetch("https://exp.host/--/api/v2/push/send", {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Accept-encoding": "gzip, deflate",
-                "Content-Type": "application/json",
+      if(user?.notificationToken && user.notificationToken !== "" && user?.locale && user.locale !== ""){
+        if (!notificationsTokens.some((token) => token === user?.notificationToken)) {
+          console.log('user.name', user.name)
+          notificationsTokens.push(user?.notificationToken);
+          if (user.locale.includes(newPushNotification.locale)) {
+            let message = {
+              to: user.notificationToken,
+              sound: "default",
+              title: newPushNotification.title,
+              body: newPushNotification.body,
+              data: {
+                link: `dest://SpotDetails/${spot}`,
               },
-              body: JSON.stringify(message),
-            });
-            if (response.statusText !== "OK") {
-              throw new Error(
-                `Failed to send push notification to ${user.notificationToken}. Status: ${response.status}`
-              );
+              _displayInForeground: true,
+            };
+            try {
+              let response = await fetch("https://exp.host/--/api/v2/push/send", {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Accept-encoding": "gzip, deflate",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(message),
+              });
+              if (response.statusText !== "OK") {
+                throw new Error(
+                  `Failed to send push notification to ${user.notificationToken}. Status: ${response.status}`
+                );
+              }
+            } catch (error) {
+              console.error(error);
             }
-          } catch (error) {
-            console.error(error);
-          }
+          } 
         }
       }
     }

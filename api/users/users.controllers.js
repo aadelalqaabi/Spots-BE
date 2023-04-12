@@ -38,6 +38,8 @@ exports.register = async (req, res, next) => {
       phone: req.body.phone,
       image: req.body.image,
       name: userName,
+      local: req.body.local,
+      platform: req.body.platform
     };
     const newUser = await User.create(newObject);
     const token = generateTokenUser(newUser);
