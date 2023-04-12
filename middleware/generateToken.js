@@ -14,6 +14,7 @@ exports.generateTokenUser = (user) => {
     notificationToken: user.notificationToken,
     locale: user.locale,
     organizers: user.organizers,
+    platform: user.platform
   };
   const token = jwt.sign(payload, JWT_SECRET);
   return token;
