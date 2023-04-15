@@ -9,6 +9,7 @@ const {
   updateSpot,
   fetchSpot,
   spotsCreate,
+  incrementViews,
 } = require("./spots.controllers");
 
 router.param("spotId", async (req, res, next, spotId) => {
@@ -66,6 +67,7 @@ router.put(
   ]),
   updateSpot
 );
+router.put("/views/:spotId", incrementViews);
 
 router.get("/", getSpots);
 
