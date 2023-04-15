@@ -51,7 +51,6 @@ exports.spotsCreate = async (req, res, next) => {
   if (req.files.adImage4 && req.files.adImage4.length > 0) {
     req.body.adImage4 = `/uploads/${req.files.adImage4[0].filename}`;
   }
-  // const completeSpot = days(req.body);
   try {
     const newSpot = await Spot.create(req.body);
     await Organizer.findByIdAndUpdate(req.user._id, {
@@ -71,11 +70,6 @@ exports.spotsCreate = async (req, res, next) => {
 exports.updateSpot = async (req, res, next) => {
   const spotId = req.params.spotId;
   const categoryId = req.params.categoryId;
-  // let spot = req.body;
-  // if(req.body.isFree === false && req.body.numOfDays === 1){
-  //   const completeSpot = daysUpdate(req.body);
-  // }
-
   try {
     if (req.files.image && req.files.image.length > 0) {
       req.body.image = `/uploads/${req.files.image[0].filename}`;
@@ -124,6 +118,23 @@ exports.updateSpot = async (req, res, next) => {
       new: true,
       maxTimeMS: 20000,
     });
+    res.status(200).json(spot);
+    return;
+  } catch (err) {
+    next(err);
+  }
+};
+exports.incrementViews = async (req, res, next) => {
+  const spotId = req.params.spotId;
+  try {
+    const spot = await Spot.findByIdAndUpdate(
+      spotId,
+      { $inc: { views: 1 } },
+      {
+        new: true,
+        maxTimeMS: 20000,
+      }
+    );
     res.status(200).json(spot);
     return;
   } catch (err) {

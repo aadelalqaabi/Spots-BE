@@ -27,6 +27,7 @@ const SpotSchema = new mongoose.Schema({
   announcementEn: String,
   announcementAr: String,
   isAd: Boolean,
+  views: { type: Number, default: 0 },
   startTime: String,
   endTime: String,
   scanned: Number,
