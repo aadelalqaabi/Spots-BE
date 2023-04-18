@@ -24,7 +24,7 @@ const OrganizerSchema = new mongoose.Schema({
   phone: String,
   image: String,
   bio: String,
-  numofDests: { type: Number, default: 1 },
+  numofDests: { type: Number, default: 3 },
   spots: [
     {
       type: mongoose.Schema.Types.ObjectId,
