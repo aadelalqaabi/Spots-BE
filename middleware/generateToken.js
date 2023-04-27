@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-require('dotenv').config();
+require("dotenv").config();
 
 exports.generateTokenUser = (user) => {
   const payload = {
@@ -14,7 +14,7 @@ exports.generateTokenUser = (user) => {
     notificationToken: user.notificationToken,
     locale: user.locale,
     organizers: user.organizers,
-    platform: user.platform
+    platform: user.platform,
   };
   const token = jwt.sign(payload, process.env.JWT_SECRET);
   return token;
@@ -30,7 +30,7 @@ exports.generateTokenOrg = (organizer) => {
     numofDests: organizer.numofDests,
     displayNameEn: organizer.displayNameEn,
     displayNameAr: organizer.displayNameAr,
-    exp: Date.now() + process.env.JWT_EXPIRATION_MS,
+    // exp: Date.now() + process.env.JWT_EXPIRATION_MS,
   };
   const token = jwt.sign(payload, process.env.JWT_SECRET);
   return token;
