@@ -3,7 +3,7 @@ const JWTStrategy = require("passport-jwt").Strategy;
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
-const { JWT_SECRET } = require("../config/keys");
+require('dotenv').config();
 const { fromAuthHeaderAsBearerToken } = require("passport-jwt/lib/extract_jwt");
 
 exports.localStrategyUser = new LocalStrategy(
@@ -26,7 +26,7 @@ exports.localStrategyUser = new LocalStrategy(
 );
 
 exports.jwtStrategyUser = new JWTStrategy(
-  { jwtFromRequest: fromAuthHeaderAsBearerToken(), secretOrKey: JWT_SECRET },
+  { jwtFromRequest: fromAuthHeaderAsBearerToken(), secretOrKey: process.env.JWT_SECRET },
   async (jwtPayload, done) => {
     if (Date.now() > jwtPayload.exp) {
       return done(null, false);

@@ -1,10 +1,9 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20");
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = require("../config/keys");
-
+require('dotenv').config();
 const google = {
-  clientID: GOOGLE_CLIENT_ID,
-  clientSecret: GOOGLE_CLIENT_SECRET,
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: "https://destkw.com/universal/user/login/google/callback",
 };
 
