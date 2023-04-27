@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { MONGODB_DATABASE_DEV, MONGODB_DATABASE_PROD } = require("./config/keys");
 require('dotenv').config();
 
 const connectDB = async () => {
@@ -13,7 +12,7 @@ const connectDB = async () => {
 };
 
 const connectToDevDatabase = async () => {
-  const conn = await mongoose.connect(MONGODB_DATABASE_DEV, {
+  const conn = await mongoose.connect(process.env.MONGODB_DATABASE_DEV, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
   });
@@ -22,7 +21,7 @@ const connectToDevDatabase = async () => {
 };
 
 const connectToProdDatabase = async () => {
-  const conn = await mongoose.connect(MONGODB_DATABASE_PROD, {
+  const conn = await mongoose.connect(process.env.MONGODB_DATABASE_PROD, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
   });

@@ -27,8 +27,8 @@ const {
   jwtStrategyOrg,
 } = require("./middleware/organizerPassport");
 const session = require("express-session");
-const { JWT_SECRET } = require("./config/keys");
 const { AppleStrategy } = require("./middleware/ApplePassport");
+require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -40,7 +40,7 @@ app.use(
   session({
     resave: false,
     saveUninitialized: true,
-    secret: JWT_SECRET,
+    secret: process.env.JWT_SECRET,
   })
 );
 

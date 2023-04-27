@@ -1,7 +1,6 @@
 const Organizer = require("../../models/Organizer");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../../config/keys");
 const { email } = require("../../middleware/email");
 const { generateTokenOrg } = require("../../middleware/generateToken");
 

@@ -1,11 +1,5 @@
 const nodemailer = require("nodemailer");
-const {
-  DEST_E_U,
-  GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET,
-  DEST_E_P,
-  GOOGLE_REFRESH_TOKEN,
-} = require("../config/keys");
+require('dotenv').config();
 const hbs = require("nodemailer-express-handlebars");
 
 const path = require("path");
@@ -15,11 +9,11 @@ exports.email = async (template, emailTo, emailSubject, emailText) => {
     service: "gmail",
     auth: {
       type: "OAuth2",
-      user: DEST_E_U,
-      pass: DEST_E_P,
-      clientId: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
-      refreshToken: GOOGLE_REFRESH_TOKEN,
+      user: process.env.DEST_E_U,
+      pass: process.env.DEST_E_P,
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
     },
   });
 
@@ -41,7 +35,7 @@ exports.email = async (template, emailTo, emailSubject, emailText) => {
     })
   );
   let mailOptions = {
-    from: `Dest <${DEST_E_P}>`,
+    from: `Dest <${process.env.DEST_E_U}>`,
     to: `${emailTo}`,
     subject: emailSubject,
     template: template,

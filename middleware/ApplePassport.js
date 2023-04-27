@@ -1,18 +1,14 @@
 const passport = require("passport");
-const {
-  APPLE_KEY_TEAM,
-  APPLE_KEY_ID,
-  APPLE_BUNDLE_ID,
-} = require("../config/keys");
+require('dotenv').config();
 const AppleStrategy = require("passport-appleid").Strategy;
 const path = require("path");
 
 exports.AppleStrategy = new AppleStrategy(
   {
-    clientID: APPLE_BUNDLE_ID,
+    clientID: process.env.APPLE_BUNDLE_ID,
     callbackURL: "https://destkw.com/api/auth/apple/callback/callback",
-    teamId: APPLE_KEY_TEAM,
-    keyIdentifier: APPLE_KEY_ID,
+    teamId: process.env.APPLE_KEY_TEAM,
+    keyIdentifier: process.env.APPLE_KEY_ID,
     privateKeyPath: path.join(__dirname, "./AuthKey_5TJZX4BHLC.p8"),
   },
   function (accessToken, refreshToken, profile, done) {
