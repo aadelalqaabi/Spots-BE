@@ -30,7 +30,7 @@ exports.generateTokenOrg = (organizer) => {
     numofDests: organizer.numofDests,
     displayNameEn: organizer.displayNameEn,
     displayNameAr: organizer.displayNameAr,
-    // exp: Date.now() + process.env.JWT_EXPIRATION_MS,
+    exp: Date.now() + parseInt(process.env.JWT_EXPIRATION_MS),
   };
   const token = jwt.sign(payload, process.env.JWT_SECRET);
   return token;
