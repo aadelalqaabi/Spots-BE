@@ -15,6 +15,8 @@ const SpotSchema = new mongoose.Schema({
   galleryImage3: String,
   galleryImage4: String,
   video: String,
+  website: String,
+  instagram: String,
   location: String,
   category: {
     type: mongoose.Schema.Types.ObjectId,
