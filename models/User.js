@@ -41,14 +41,15 @@ const UserSchema = new mongoose.Schema({
       ref: "Reward",
     },
   ],
-  notificationToken: {type: String, default: ""},
-  locale: {type: String, default: ""},
+  notificationToken: { type: String, default: "" },
+  locale: { type: String, default: "" },
   organizers: [
     {
       type: String,
     },
   ],
-  platform: {type: String, default: ""},
+  platform: { type: String, default: "" },
+  saved: Array,
 });
 
 module.exports = mongoose.model("User", UserSchema);
