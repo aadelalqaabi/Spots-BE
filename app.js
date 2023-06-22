@@ -17,6 +17,7 @@ const applicationRoutes = require("./api/applications/applications.routes");
 const pushNotificationRoutes = require("./api/pushNotification/pushNotification.routes");
 const forgetOrganizersRoutes = require("./api/forgetOrganizers/forgetOrganizers.routes");
 const reportRoutes = require("./api/reports/reports.routes");
+const popularRoutes = require("./api/populars/populars.routes");
 const cors = require("cors");
 const {
   localStrategyUser,
@@ -28,7 +29,7 @@ const {
 } = require("./middleware/organizerPassport");
 const session = require("express-session");
 const { AppleStrategy } = require("./middleware/ApplePassport");
-require('dotenv').config();
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -104,6 +105,7 @@ app.use("/api/application", applicationRoutes);
 app.use("/api/pushNotification", pushNotificationRoutes);
 app.use("/api/forgetOrganizer", forgetOrganizersRoutes);
 app.use("/api/report", reportRoutes);
+app.use("/api/popular", popularRoutes);
 //
 app.use((req, res, next) => {
   const err = new Error("Not Found");
