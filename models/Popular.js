@@ -5,8 +5,12 @@ const PopularSchema = new mongoose.Schema({
   titleAr: String,
   category: String,
   categoryAr: String,
+  description: String,
+  descriptionAr: String,
   image: String,
   instagram: String,
+  website: String,
+  saves: { type: Number, default: 0 },
 });
 
 module.exports = mongoose.model("Popular", PopularSchema);

@@ -39,7 +39,7 @@ exports.register = async (req, res, next) => {
       image: req.body.image,
       name: userName,
       local: req.body.local,
-      platform: req.body.platform
+      platform: req.body.platform,
     };
     const newUser = await User.create(newObject);
     const token = generateTokenUser(newUser);
@@ -52,7 +52,9 @@ exports.register = async (req, res, next) => {
 
 exports.getUsers = async (req, res) => {
   try {
-    const users = await User.find().populate("spots").select("-password");
+    const users = await User.find()
+      .populate("spots", "saved")
+      .select("-password");
     res.status(201).json(users);
     return;
   } catch (err) {
@@ -155,26 +157,6 @@ exports.spotAdd = async (req, res, next) => {
   }
 };
 
-exports.rewardAdd = async (req, res, next) => {
-  const { rewardId } = req.params;
-  try {
-    await Reward.findByIdAndUpdate(rewardId, {
-      $push: { users: req.user._id },
-    });
-    const user = await User.findByIdAndUpdate(
-      req.user._id,
-      { $push: { rewards: rewardId } },
-      {
-        new: true,
-      }
-    ).select("-password");
-    res.status(200).json(user);
-    return;
-  } catch (error) {
-    next(error);
-  }
-};
-
 exports.removeSpot = async (req, res, next) => {
   const { spotId } = req.params;
   try {
@@ -201,6 +183,63 @@ exports.removeSpot = async (req, res, next) => {
   }
 };
 
+exports.popularSave = async (req, res, next) => {
+  const { popularId } = req.params;
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { $push: { saved: popularId } },
+      {
+        new: true,
+      }
+    ).select("-password");
+    const token = generateTokenUser(user);
+    res.status(200).json({ token });
+    return;
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.popularUnsave = async (req, res, next) => {
+  const { popularId } = req.params;
+  try {
+    const user = await User.findByIdAndUpdate(
+      { _id: req.user._id },
+      {
+        $pull: { saved: popularId },
+      },
+      {
+        new: true,
+      }
+    ).select("-password");
+    const token = generateTokenUser(user);
+    res.status(200).json({ token });
+    return;
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.rewardAdd = async (req, res, next) => {
+  const { rewardId } = req.params;
+  try {
+    await Reward.findByIdAndUpdate(rewardId, {
+      $push: { users: req.user._id },
+    });
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { $push: { rewards: rewardId } },
+      {
+        new: true,
+      }
+    ).select("-password");
+    res.status(200).json(user);
+    return;
+  } catch (error) {
+    next(error);
+  }
+};
 exports.generateOTP = async (req, res) => {
   const { email } = req.params;
   try {

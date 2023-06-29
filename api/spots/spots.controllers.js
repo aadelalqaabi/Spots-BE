@@ -1,7 +1,6 @@
 const Spot = require("../../models/Spot");
 const Organizer = require("../../models/Organizer");
 const Category = require("../../models/Category");
-const PushNotification = require("../../models/PushNotification");
 
 exports.getSpots = async (req, res, next) => {
   try {
