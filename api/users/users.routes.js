@@ -23,6 +23,8 @@ const {
   registerUser,
   unRegisterUser,
   goodByeForEver,
+  popularSave,
+  popularUnsave,
 } = require("./users.controllers");
 
 router.param("userId", async (req, res, next, userId) => {
@@ -57,16 +59,27 @@ router.put(
   passport.authenticate("userJWT", { session: false }),
   spotAdd
 );
-router.put(
-  "/rewards/:rewardId",
-  passport.authenticate("userJWT", { session: false }),
-  rewardAdd
-);
 
 router.put(
   "/remove/:spotId",
   passport.authenticate("userJWT", { session: false }),
   removeSpot
+);
+router.put(
+  "/popular/save/:popularId",
+  passport.authenticate("userJWT", { session: false }),
+  popularSave
+);
+
+router.put(
+  "/popular/unsave/:popularId",
+  passport.authenticate("userJWT", { session: false }),
+  popularUnsave
+);
+router.put(
+  "/rewards/:rewardId",
+  passport.authenticate("userJWT", { session: false }),
+  rewardAdd
 );
 
 router.put(

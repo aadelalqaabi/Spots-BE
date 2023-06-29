@@ -22,6 +22,23 @@ exports.popularCreate = async (req, res, next) => {
   }
 };
 
+exports.updatePopular = async (req, res, next) => {
+  const popularId = req.params.popularId;
+  try {
+    if (req.file) {
+      req.body.image = `/uploads/${req.file.filename}`;
+    }
+    const popular = await Popular.findByIdAndUpdate(popularId, req.body, {
+      new: true,
+      maxTimeMS: 20000,
+    });
+    res.status(200).json(popular);
+    return;
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.deletePopular = async (req, res, next) => {
   const { popularId } = req.params;
   try {

@@ -15,6 +15,7 @@ exports.generateTokenUser = (user) => {
     locale: user.locale,
     organizers: user.organizers,
     platform: user.platform,
+    saved: user.saved,
   };
   const token = jwt.sign(payload, process.env.JWT_SECRET);
   return token;

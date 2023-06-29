@@ -49,7 +49,12 @@ const UserSchema = new mongoose.Schema({
     },
   ],
   platform: { type: String, default: "" },
-  saved: Array,
+  saved: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Popular",
+    },
+  ],
 });
 
 module.exports = mongoose.model("User", UserSchema);
