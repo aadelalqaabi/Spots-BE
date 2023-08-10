@@ -11,6 +11,7 @@ const PopularSchema = new mongoose.Schema({
   instagram: String,
   website: String,
   saves: { type: Number, default: 0 },
+  expired: { type: Boolean, default: false }
 });
 
 module.exports = mongoose.model("Popular", PopularSchema);
